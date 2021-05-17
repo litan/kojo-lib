@@ -37,8 +37,8 @@ object Builtins {
 }
 
 class Builtins(
-                val TSCanvas: DrawingCanvasAPI,
-                val Tw: TurtleWorldAPI,
+                val CanvasAPI: DrawingCanvasAPI,
+                val TurtleAPI: TurtleWorldAPI,
                 val Staging: staging.API,
                 mp3player: music.KMp3,
                 fuguePlayer: music.FuguePlayer,
@@ -49,11 +49,11 @@ class Builtins(
 
   import language.implicitConversions
 
-  val tCanvas = TSCanvas.tCanvas
+  val turtleCanvas = CanvasAPI.tCanvas
 
-  val Costume = new Tw.Costume
-  val Background = new Tw.Background
-  val Sound = new Tw.Sound
+  val Costume = new TurtleAPI.Costume
+  val Background = new TurtleAPI.Background
+  val Sound = new TurtleAPI.Sound
 
   def retainSingleLineCode() = {}
 
@@ -174,7 +174,7 @@ class Builtins(
 
   def postDrawTransform(fn: Picture => Unit) = picture.PostDrawTransformc(fn)
 
-  implicit val _picCanvas = tCanvas
+  implicit val _picCanvas = turtleCanvas
 
   def pict(painter: Painter) = picture.Pic(painter)
 
@@ -212,7 +212,7 @@ class Builtins(
 
   def isKeyPressed(key: Int) = staging.Inputs.isKeyPressed(key)
 
-  def activateCanvas() = tCanvas.activate()
+  def activateCanvas() = turtleCanvas.activate()
 
   def filterPicture(p: Picture, filter: BufferedImageOp): Picture = {
     drawCentered(p)
@@ -299,9 +299,9 @@ class Builtins(
   }
 
 
-  def canvasBounds = tCanvas.cbounds
+  def canvasBounds = turtleCanvas.cbounds
 
-  def setBackground(c: Paint) = tCanvas.setCanvasBackground(c)
+  def setBackground(c: Paint) = turtleCanvas.setCanvasBackground(c)
 
   def isMp3Playing = mp3player.isMp3Playing
 
@@ -317,7 +317,7 @@ class Builtins(
 
   //  def bounceVecOffStage(v: Vector2D, p: Picture): Vector2D =
   //    picture.bounceVecOffStage(v, p)
-  def bouncePicVectorOffStage(p: Picture, v: Vector2D): Vector2D = bouncePicVectorOffPic(p, v, TSCanvas.stageBorder)
+  def bouncePicVectorOffStage(p: Picture, v: Vector2D): Vector2D = bouncePicVectorOffPic(p, v, CanvasAPI.stageBorder)
 
   def bouncePicVectorOffPic(pic: Picture, v: Vector2D, obstacle: Picture): Vector2D =
     picture.bouncePicVectorOffPic(pic, v, obstacle, Random)
@@ -519,9 +519,9 @@ class Builtins(
     val fpsLabel = Picture.textu("Fps: ", fontSize, color)
     fpsLabel.setPosition(cb.x + 10, cb.y + cb.height - 10)
     draw(fpsLabel)
-    fpsLabel.forwardInputTo(TSCanvas.stageArea)
+    fpsLabel.forwardInputTo(CanvasAPI.stageArea)
 
-    TSCanvas.timer(1000) {
+    CanvasAPI.timer(1000) {
       fpsLabel.update(s"Fps: $frameCnt")
       frameCnt = 0
     }
@@ -541,7 +541,7 @@ class Builtins(
 
   def stopAnimation() = {
     Utils.stopMonitoredThreads()
-    tCanvas.stopAnimation()
+    turtleCanvas.stopAnimation()
     fuguePlayer.stopMusic()
     fuguePlayer.stopBgMusic()
     mp3player.stopMp3()
@@ -553,9 +553,9 @@ class Builtins(
     @volatile var gameTime = 0
     val timeLabel = trans(cb.x + dx, cb.y + dy) -> PicShape.textu(gameTime, fontSize, color)
     draw(timeLabel)
-    timeLabel.forwardInputTo(TSCanvas.stageArea)
+    timeLabel.forwardInputTo(CanvasAPI.stageArea)
 
-    TSCanvas.timer(1000) {
+    CanvasAPI.timer(1000) {
       gameTime += 1
       timeLabel.update(gameTime)
 
@@ -569,7 +569,7 @@ class Builtins(
   type Shape = PicDrawingDsl
 
   object Shape {
-    def clear() = TSCanvas.cleari()
+    def clear() = CanvasAPI.cleari()
 
     def rectangle(w: Double, h: Double): Shape = DslImpl(picture.rect(h, w))
 
@@ -659,7 +659,7 @@ class Builtins(
     fn
   }
 
-  def drawLoop(fn: => Unit) = TSCanvas.animate {
+  def drawLoop(fn: => Unit) = CanvasAPI.animate {
     fn
   }
 
@@ -673,7 +673,7 @@ class Builtins(
   def originTopLeft(): Unit = {
     val (w, h) = wh
 
-    def work = TSCanvas.zoomXY(1, -1, w / 2, h / 2)
+    def work = CanvasAPI.zoomXY(1, -1, w / 2, h / 2)
 
     work
     Utils.schedule(0.5) {
@@ -684,7 +684,7 @@ class Builtins(
   def originBottomLeft(): Unit = {
     val (w, h) = wh
 
-    def work = TSCanvas.zoomXY(1, 1, w / 2, h / 2)
+    def work = CanvasAPI.zoomXY(1, 1, w / 2, h / 2)
 
     work
     Utils.schedule(0.5) {
@@ -731,7 +731,7 @@ class Builtins(
     }
     draw(pic)
     pic.scale(1 / scaleFactor)
-    TSCanvas.animate {
+    CanvasAPI.animate {
       pic.update()
       if (!cd.loop) {
         stopAnimation()

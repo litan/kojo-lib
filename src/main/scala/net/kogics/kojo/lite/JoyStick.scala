@@ -68,7 +68,7 @@ class JoyStick(radius: Double)(builtins: Builtins) {
   }
 
   def movePlayerWithinStage(player: Picture, scaleVelocity: Double = 1, directionConstraint: net.kogics.kojo.util.Vector2D = null): Unit = {
-    import builtins.TSCanvas._
+    import builtins.CanvasAPI._
 
     val vel = movePlayerHelper(player, scaleVelocity, directionConstraint)
 

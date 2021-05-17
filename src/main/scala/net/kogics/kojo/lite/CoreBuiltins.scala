@@ -22,7 +22,7 @@ import net.kogics.kojo.util.Utils
 import io.github.jdiemke.triangulation.Triangle2D
 
 trait CoreBuiltins extends Rationals {
-  def TSCanvas: TSCanvasFeatures
+  def CanvasAPI: TSCanvasFeatures
 
   type Turtle = core.Turtle
   type Color = java.awt.Color
@@ -193,7 +193,7 @@ trait CoreBuiltins extends Rationals {
   def Font(name: String, size: Int) = new Font(name, JFont.PLAIN, size)
   def Font(name: String, size: Int, style: Int) = new Font(name, style, size)
   def textExtent(text: String, fontSize: Int, fontName: String = null) = Utils.runInSwingThreadAndWait {
-    val tnode = Utils.textNode(text, 0, 0, TSCanvas.camScale, fontSize, if (fontName == null) None else Some(fontName))
+    val tnode = Utils.textNode(text, 0, 0, CanvasAPI.camScale, fontSize, if (fontName == null) None else Some(fontName))
     val b = tnode.getFullBounds
     new Rectangle(new Point(b.x, b.y), new Point(b.x + b.width, b.y + b.height))
   }
@@ -235,10 +235,10 @@ trait CoreBuiltins extends Rationals {
   def image(url: URL): BufferedImage = Utils.loadUrlImage(url)
 
   // For younger kids
-  def clr() = { TSCanvas.clear(); TSCanvas.turtle0.invisible() }
+  def clr() = { CanvasAPI.clear(); CanvasAPI.turtle0.invisible() }
   def nt: LoTurtle = nt(0, 0)
   def nt(x: Double = 0, y: Double = 0): LoTurtle = {
-    nt(TSCanvas.newTurtle(x, y, "/images/blue-turtle32.png"))
+    nt(CanvasAPI.newTurtle(x, y, "/images/blue-turtle32.png"))
   }
   def nt(t: core.Turtle): LoTurtle = new LoTurtle(t)
   def rpt(n: Int)(code: => LoTurtle): LoTurtle = {
