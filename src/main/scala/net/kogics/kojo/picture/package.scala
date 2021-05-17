@@ -14,25 +14,18 @@
  */
 package net.kogics.kojo
 
-import java.awt.Color
-import java.awt.Image
-import java.awt.Paint
+import java.awt.{Color, Graphics2D, Image, Paint}
 import java.awt.event.KeyEvent
 import java.awt.geom.GeneralPath
 import java.awt.image.BufferedImageOp
 import java.net.URL
 import java.util.Random
-
 import javax.swing.JComponent
-
-import scala.swing.Graphics2D
-
 import com.jhlabs.image.LightFilter
 import com.jhlabs.image.LightFilter.Light
 import com.vividsolutions.jts.geom.Coordinate
 import com.vividsolutions.jts.geom.GeometryFactory
 import com.vividsolutions.jts.geom.PrecisionModel
-
 import net.kogics.kojo.core.Cm
 import net.kogics.kojo.core.Inch
 import net.kogics.kojo.core.Pixel

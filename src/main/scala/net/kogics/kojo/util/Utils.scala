@@ -15,55 +15,25 @@
 package net.kogics.kojo
 package util
 
-import java.awt.Color
-import java.awt.EventQueue
-import java.awt.Font
-import java.awt.Image
-import java.awt.Toolkit
-import java.awt.event.ActionEvent
-import java.awt.event.ActionListener
-import java.awt.event.KeyEvent
-import java.awt.image.BufferedImage
-import java.io.BufferedInputStream
-import java.io.BufferedReader
-import java.io.File
-import java.io.FileInputStream
-import java.io.FileOutputStream
-import java.io.FilenameFilter
-import java.io.InputStream
-import java.io.InputStreamReader
-import java.io.PrintWriter
-import java.io.StringWriter
-import java.net.InetAddress
-import java.net.URL
-import java.util.LinkedList
-import java.util.Locale
-import java.util.Properties
-import java.util.ResourceBundle
-import java.util.concurrent.ConcurrentHashMap
-import java.util.concurrent.CountDownLatch
-import java.util.concurrent.TimeUnit
-import java.util.concurrent.locks.Lock
-import java.util.concurrent.locks.ReentrantLock
-import java.util.logging.Level
-import java.util.logging.Logger
-
-import javax.imageio.ImageIO
-import javax.swing.ImageIcon
-import javax.swing.JComponent
-import javax.swing.JDialog
-import javax.swing.KeyStroke
-import javax.swing.Timer
-import javax.swing.text.JTextComponent
-
-import scala.collection.mutable
-import scala.collection.mutable.HashMap
-
+import akka.actor.ActorSystem
+import edu.umd.cs.piccolo.event.PInputEvent
 import net.kogics.kojo.core.KojoCtx
 import net.kogics.kojo.util.RichFile.enrichFile
 
-import akka.actor.ActorSystem
-import edu.umd.cs.piccolo.event.PInputEvent
+import java.awt.{Color, EventQueue, Font, Image, Toolkit}
+import java.awt.event.{ActionEvent, ActionListener, KeyEvent}
+import java.awt.image.BufferedImage
+import java.io._
+import java.net.{InetAddress, URL}
+import java.util.{LinkedList, Locale, Properties, ResourceBundle}
+import java.util.concurrent.{ConcurrentHashMap, CountDownLatch, TimeUnit}
+import java.util.concurrent.locks.{Lock, ReentrantLock}
+import java.util.logging.{Level, Logger}
+import javax.imageio.ImageIO
+import javax.swing._
+import javax.swing.text.JTextComponent
+import scala.collection.mutable
+import scala.collection.mutable.HashMap
 
 object Utils {
   lazy val Log = Logger.getLogger("Utils")

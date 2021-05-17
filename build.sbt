@@ -2,14 +2,14 @@ name := "Kojo Lib"
 
 version := "2.9"
 
-scalaVersion := "2.13.3"
+scalaVersion := "2.13.5"
 
 fork in run := true
 
 scalacOptions := Seq("-feature", "-deprecation")
 javaOptions in run ++= Seq("-Xmx1024m", "-Xss1m", "-XX:+UseConcMarkSweepGC", "-XX:+CMSClassUnloadingEnabled")
 
-fork in Test := true
+fork in Test := false
 
 javaOptions in Test ++= Seq("-Xmx1024m", "-Xss1m", "-XX:+UseConcMarkSweepGC", "-XX:+CMSClassUnloadingEnabled")
 
@@ -17,15 +17,12 @@ testOptions += Tests.Argument(TestFrameworks.JUnit, "-v", "-s")
 
 // parallelExecution in Test := false
 
-autoScalaLibrary := false
+autoScalaLibrary := true
 
 libraryDependencies ++= Seq(
-    "org.scala-lang" % "scala-reflect" % "2.13.3",
+    "org.scala-lang" % "scala-reflect" % "2.13.3" % "test",
+    "org.scala-lang.modules" % "scala-xml_2.13" % "1.3.0" % "test",
     "com.typesafe.akka" % "akka-actor_2.13" % "2.5.29",
-    "org.scala-lang.modules" % "scala-swing_2.13" % "2.1.1",
-    "org.scala-lang.modules" % "scala-xml_2.13" % "1.2.0",
-    "org.scala-lang.modules" % "scala-parser-combinators_2.13" % "1.1.2",
-    "com.github.benhutchison" %% "scalaswingcontrib" % "1.8",
     "org.piccolo2d" % "piccolo2d-core" % "1.3.1",
     "org.piccolo2d" % "piccolo2d-extras" % "1.3.1",
     "com.vividsolutions" % "jts" % "1.13" intransitive(),

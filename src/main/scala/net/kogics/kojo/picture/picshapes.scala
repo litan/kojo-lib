@@ -15,45 +15,21 @@
 
 package net.kogics.kojo.picture
 
-import java.awt.BasicStroke
-import java.awt.Color
-import java.awt.Component
-import java.awt.Font
-import java.awt.GraphicsEnvironment
-import java.awt.Image
-import java.awt.RenderingHints
-import java.awt.Transparency
-import java.awt.geom.Arc2D
-import java.awt.geom.GeneralPath
-import java.awt.geom.PathIterator
-import java.awt.geom.Point2D
-import java.awt.geom.Rectangle2D
-import java.net.URL
-
-import javax.swing.JComboBox
-import javax.swing.JComponent
-import javax.swing.JPanel
-import javax.swing.event.PopupMenuEvent
-import javax.swing.event.PopupMenuListener
-
-import scala.collection.mutable.ArrayBuffer
-import scala.swing.Graphics2D
-
-import com.vividsolutions.jts.geom.Coordinate
-import com.vividsolutions.jts.geom.Geometry
-
-import net.kogics.kojo.core.Picture
-import net.kogics.kojo.core.SCanvas
-import net.kogics.kojo.staging.CapJoinConstants._
-import net.kogics.kojo.util.Constants
-import net.kogics.kojo.util.Utils
-
+import com.vividsolutions.jts.geom.{Coordinate, Geometry}
 import edu.umd.cs.piccolo.PNode
-import edu.umd.cs.piccolo.nodes.PImage
-import edu.umd.cs.piccolo.nodes.PPath
-import edu.umd.cs.piccolo.nodes.PText
+import edu.umd.cs.piccolo.nodes.{PImage, PPath}
 import edu.umd.cs.piccolo.util.PPaintContext
 import edu.umd.cs.piccolox.pswing.PSwing
+import net.kogics.kojo.core.{Picture, SCanvas}
+import net.kogics.kojo.staging.CapJoinConstants._
+import net.kogics.kojo.util.{Constants, Utils}
+
+import java.awt._
+import java.awt.geom._
+import java.net.URL
+import javax.swing.{JComboBox, JComponent, JPanel}
+import javax.swing.event.{PopupMenuEvent, PopupMenuListener}
+import scala.collection.mutable.ArrayBuffer
 
 trait PicShapeOps { self: Picture with CorePicOps =>
   def realDraw() = Utils.runInSwingThread {

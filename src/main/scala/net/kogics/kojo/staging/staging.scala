@@ -260,15 +260,6 @@ class API(canvas: SpriteCanvas) {
   def triangleFanShape(p0: Point, pts: Seq[Point]) = TriangleFanShape(p0, pts)
   //T ComplexShapesTest ends
 
-  //W
-  //W==SVG Shapes==
-  //W
-  //WGiven an SVG element, the corresponding shape can be drawn.
-  //W
-  //T SvgShapesTest begins
-  def svgShape(node: scala.xml.Node) = SvgShape(node)
-  //T SvgShapesTest ends
-  
   def sprite(x: Double, y: Double, fname: String) = Sprite(point(x, y), fname)
   def path(x: Double, y: Double) = Path(point(x, y))
   def group(shapes: List[Shape]) = Composite(shapes)

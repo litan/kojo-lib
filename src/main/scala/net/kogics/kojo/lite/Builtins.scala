@@ -16,22 +16,20 @@
 package net.kogics.kojo
 package lite
 
-import java.awt.geom.GeneralPath
-import java.awt.image.{BufferedImage, BufferedImageOp}
-import java.awt.{Paint, Toolkit}
-import java.net.URL
-
 import com.jhlabs.image.AbstractBufferedImageOp
 import com.jhlabs.image.LightFilter.Light
-import javax.swing.JComponent
 import net.kogics.kojo.core.{VertexShape, Voice}
 import net.kogics.kojo.picture.{DslImpl, PicCache, PicDrawingDsl}
 import net.kogics.kojo.turtle.TurtleWorldAPI
-import net.kogics.kojo.util.{Throttler, Utils}
-import net.kogics.kojo.xscala.{CodeCompletionUtils, Help, RepeatCommands}
+import net.kogics.kojo.util.Utils
+import net.kogics.kojo.xscala.RepeatCommands
 
+import java.awt.geom.GeneralPath
+import java.awt.image.{BufferedImage, BufferedImageOp}
+import java.awt.{Graphics2D, Paint, Toolkit}
+import java.net.URL
+import javax.swing.JComponent
 import scala.language.implicitConversions
-import scala.swing.Graphics2D
 
 // a static instance is needed for the compiler prefix code 
 object Builtins {
@@ -214,6 +212,8 @@ class Builtins(
 
   def isKeyPressed(key: Int) = staging.Inputs.isKeyPressed(key)
 
+  def activateCanvas() = tCanvas.activate()
+
   def filterPicture(p: Picture, filter: BufferedImageOp): Picture = {
     drawCentered(p)
     p.scale(1, -1)
@@ -314,14 +314,6 @@ class Builtins(
   def stopMusic() = fuguePlayer.stopMusic()
 
   def newMp3Player = new music.KMp3(kojoCtx)
-
-  def addCodeTemplates(lang: String, templates: Map[String, String]): Unit = {
-    CodeCompletionUtils.addTemplates(lang, templates)
-  }
-
-  def addHelpContent(lang: String, content: Map[String, String]): Unit = {
-    Help.addContent(lang, content)
-  }
 
   //  def bounceVecOffStage(v: Vector2D, p: Picture): Vector2D =
   //    picture.bounceVecOffStage(v, p)
