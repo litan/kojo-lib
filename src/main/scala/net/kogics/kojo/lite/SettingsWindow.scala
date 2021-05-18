@@ -22,16 +22,12 @@ import javax.swing._
 
 class SettingsWindow(owner: JFrame) extends JDialog(owner) {
 
-  val theme = Utils.appProperty("theme").getOrElse("light")
   val fontIncrease = Utils.appProperty("font.increase").getOrElse("0")
   val dpi = Utils.appProperty("export.image.dpi").getOrElse("")
   val inches = Utils.appProperty("export.image.inches").getOrElse("")
   val dimension = Utils.appProperty("export.image.dimension").getOrElse("height")
 
   def filler(n: Int) = Label(" " * n)
-
-  val themeDd = DropDown("light", "dark")
-  themeDd.setSelectedItem(theme)
 
   val fontDd = DropDown((-10 to 10).reverse: _*)
   fontDd.setSelectedItem(fontIncrease)
@@ -44,7 +40,6 @@ class SettingsWindow(owner: JFrame) extends JDialog(owner) {
       aspectTf.setText(ps.name)
       dimensionDd.setSelectedItem("height")
       dimensionDd.setEnabled(false)
-      adjustCanvasBtn.requestFocusInWindow()
     case None =>
   }
 
@@ -74,8 +69,6 @@ class SettingsWindow(owner: JFrame) extends JDialog(owner) {
   val dimensionDd = DropDown("height", "width")
   dimensionDd.setSelectedItem(dimension)
 
-  val r1 = RowPanel(filler(10), Label(Utils.loadString("S_UITheme")), filler(3), themeDd)
-  val r2 = RowPanel(filler(10), Label(Utils.loadString("S_UIThemeHelp")), filler(10))
   val r3 = RowPanel(filler(10), Label(Utils.loadString("S_FontDelta")), filler(3), fontDd)
   val r4 = RowPanel(filler(10), Label(Utils.loadString("S_FontDeltaHelp")), filler(10))
   val r5 = RowPanel(filler(10), Label(Utils.loadString("S_SettingsRestart")))
@@ -100,58 +93,12 @@ class SettingsWindow(owner: JFrame) extends JDialog(owner) {
     currentAspectTf.setText(f"$r%2.3f")
   }
 
-  val adjustCanvasBtn = new JButton(Utils.loadString("S_AdjustCanvas"))
-  adjustCanvasBtn.addActionListener(new ActionListener {
-    def actionPerformed(e: ActionEvent): Unit = {
-      changeModality(false)
-      PaperSize.fromString(aspectTf.value) match {
-        case Some(ps) =>
-          ps match {
-            case A4 =>
-              Builtins.instance.setDrawingCanvasToA4()
-            case A4Landscape =>
-              Builtins.instance.setDrawingCanvasToA4Landscape()
-            case A3 =>
-              Builtins.instance.setDrawingCanvasToA3()
-            case A3Landscape =>
-              Builtins.instance.setDrawingCanvasToA3Landscape()
-            case A2 =>
-              Builtins.instance.setDrawingCanvasToA2()
-            case A2Landscape =>
-              Builtins.instance.setDrawingCanvasToA2Landscape()
-            case A1 =>
-              Builtins.instance.setDrawingCanvasToA1()
-            case A1Landscape =>
-              Builtins.instance.setDrawingCanvasToA1Landscape()
-            case A0 =>
-              Builtins.instance.setDrawingCanvasToA0()
-            case A0Landscape =>
-              Builtins.instance.setDrawingCanvasToA0Landscape()
-          }
-          Utils.schedule(0.3) {
-            setCurrentAspectRatio()
-          }
-        case None =>
-          try {
-            val r = aspectTf.value.toDouble
-            Builtins.instance.setDrawingCanvasAspectRatio(r)
-            Utils.schedule(0.3) {
-              setCurrentAspectRatio()
-            }
-          }
-          catch {
-            case throwable: Throwable =>
-          }
-      }
-    }
-  })
   val aspectTf = TextField("")
   aspectTf.setColumns(8)
   handleInchesDdSelection(inchesDd.value)
   val currentAspectTf = Label("")
   setCurrentAspectRatio()
 
-  val r8 = RowPanel(filler(10), Label(Utils.loadString("S_CanvasAspectRatio")), aspectTf, adjustCanvasBtn, filler(3))
   val r9 = RowPanel(filler(10), Label(Utils.loadString("S_CanvasCurrentAspectRatio")), currentAspectTf, filler(3))
 
   val okCancel = new JPanel
@@ -159,7 +106,6 @@ class SettingsWindow(owner: JFrame) extends JDialog(owner) {
   ok.addActionListener(new ActionListener {
     def actionPerformed(ev: ActionEvent): Unit = {
       val newFontIncrease = fontDd.value.toString
-      val newTheme = themeDd.value
       var newInches = {
         val v = inchesDd.value
         PaperSize.fromString(v) match {
@@ -188,7 +134,6 @@ class SettingsWindow(owner: JFrame) extends JDialog(owner) {
       }
       val newDimension = dimensionDd.value
       val m = Map(
-        "theme" -> newTheme,
         "font.increase" -> newFontIncrease,
         "export.image.dpi" -> newDpi,
         "export.image.inches" -> newInches,
@@ -207,8 +152,8 @@ class SettingsWindow(owner: JFrame) extends JDialog(owner) {
   okCancel.add(ok)
   okCancel.add(cancel)
 
-  val d1 = ColPanel(filler(1), r1, r2, r3, r4, r5, filler(1))
-  val d2 = ColPanel(filler(1), r6, r7, r9, r8, ColPanel.verticalGlue, ColPanel.verticalGlue, filler(1))
+  val d1 = ColPanel(filler(1), r3, r4, r5, filler(1))
+  val d2 = ColPanel(filler(1), r6, r7, r9, ColPanel.verticalGlue, ColPanel.verticalGlue, filler(1))
 
   setTitle(Utils.loadString("S_Settings"))
   setModal(true)
