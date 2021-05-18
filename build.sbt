@@ -51,7 +51,7 @@ lazy val dist = project
   .settings(
     distOutpath              := baseDirectory.value / "dist",
     buildDist   := {
-      val allLibs:                List[File]          = dependencyClasspath.in(Runtime).value.map(_.data).filter(_.isFile).toList
+      val allLibs:                List[File]          = dependencyClasspath.in(Runtime).value.map(_.data).filter(f => f.isFile && !f.getName.startsWith("scala")).toList
       val buildArtifact:          File                = packageBin.in(Runtime).value
       val jars:                   List[File]          = buildArtifact :: allLibs
       val `mappings src->dest`:   List[(File, File)]  = jars.map(f => (f, distOutpath.value / f.getName))
