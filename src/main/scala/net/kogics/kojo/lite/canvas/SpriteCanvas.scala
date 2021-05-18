@@ -24,6 +24,7 @@ import edu.umd.cs.piccolo.util.PPaintContext
 import edu.umd.cs.piccolox.pswing.PSwingCanvas
 import net.kogics.kojo.core._
 import net.kogics.kojo.figure.Figure
+import net.kogics.kojo.lite.SettingsWindow
 import net.kogics.kojo.picture.PicCache
 import net.kogics.kojo.staging.Rectangle
 import net.kogics.kojo.turtle.Turtle
@@ -216,8 +217,8 @@ class SpriteCanvas(val kojoCtx: core.KojoCtx) extends PSwingCanvas with SCanvas 
 
   def camScale = unitLen match {
     case Pixel => 1
-    case Inch => Dpi
-    case Cm => Dpi / 2.54
+    case Inch  => Dpi
+    case Cm    => Dpi / 2.54
   }
 
   private def initCamera(): Unit = {
@@ -323,20 +324,20 @@ class SpriteCanvas(val kojoCtx: core.KojoCtx) extends PSwingCanvas with SCanvas 
 
     val seedDelta = unitLen match {
       case Pixel => 50
-      case Inch => Dpi
-      case Cm => Dpi / 2.54
+      case Inch  => Dpi
+      case Cm    => Dpi / 2.54
     }
 
     val scale = getCamera.getViewScale
     val MaxPrec = 10
     val prec0 = Math.round(scale)
     val prec = prec0 match {
-      case p if p < 10 => 0
-      case p if p < 50 => 2
+      case p if p < 10  => 0
+      case p if p < 50  => 2
       case p if p < 100 => 4
       case p if p < 150 => 6
       case p if p < 200 => 8
-      case _ => MaxPrec
+      case _            => MaxPrec
     }
 
     val labelPrec = if (scale % seedDelta == 0) math.log10(scale).round else prec
@@ -976,7 +977,7 @@ class SpriteCanvas(val kojoCtx: core.KojoCtx) extends PSwingCanvas with SCanvas 
                 case Some(inchVal) =>
                   PaperSize.fromString(inchVal) match {
                     case Some(ps) => if (dim == "height") ps.heightInches else ps.widthInches
-                    case None => inchVal.toDouble
+                    case None     => inchVal.toDouble
                   }
                 case None => 1.0
               }
@@ -1017,12 +1018,23 @@ class SpriteCanvas(val kojoCtx: core.KojoCtx) extends PSwingCanvas with SCanvas 
 
     addSeparator()
 
-    // Todo
+    // full-screen menu item might not be needed
+    // programmatic control over canvas size would be better
     //    val fsCanvasAction = kojoCtx.fullScreenCanvasAction()
     //    val fullScreenItem: JCheckBoxMenuItem = new JCheckBoxMenuItem(fsCanvasAction)
     //    add(fullScreenItem)
     //
     //    addSeparator()
+
+    val settingsItem = new JMenuItem(Utils.loadString("S_Settings"))
+    settingsItem.addActionListener(new ActionListener {
+      def actionPerformed(e: ActionEvent): Unit = {
+        new SettingsWindow(kojoCtx.frame).setVisible(true)
+      }
+    })
+    add(settingsItem)
+
+    addSeparator()
 
     add("<html><em>%s</em></html>" format (Utils.loadString("S_MouseActions")))
     addPopupMenuListener(new PopupMenuListener {
