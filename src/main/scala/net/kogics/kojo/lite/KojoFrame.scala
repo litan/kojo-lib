@@ -39,6 +39,7 @@ class KojoFrame {
 
     val statusBar = new StatusBar
     kojoCtx.statusBar = statusBar
+    statusBar.showText("   ")
 
     val frame = new JFrame("Kojo")
 
