@@ -19,6 +19,9 @@ object Main {
         spiral(size + 2, angle)
       }
     }
+
+    size(20, 900)
+    setDrawingCanvasToA4()
     clear()
     setPenColor(darkGray)
     setFillColor(green)

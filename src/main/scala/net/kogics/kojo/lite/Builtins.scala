@@ -227,9 +227,15 @@ class Builtins(
   }
 
   def setDrawingCanvasAspectRatio(r: Double): Unit = Utils.runLaterInSwingThread {
+    val frame = kojoCtx.frame
+    val b = frame.getBounds()
+    val newWidth = b.height * r
+    setDrawingCanvasSize(math.round(newWidth).toInt, b.height)
   }
 
   def setDrawingCanvasSize(width: Int, height: Int): Unit = Utils.runLaterInSwingThread {
+    kojoCtx.frame.setSize(width, height)
+    kojoCtx.frame.repaint()
   }
 
   def setDrawingCanvasToA4(): Unit = {
