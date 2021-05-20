@@ -289,6 +289,7 @@ class SaltireOutline(val origin: Point,
       path.lineTo(x2.toFloat,     y2.toFloat + 2)
       path.lineTo(x1.toFloat + 1, y1.toFloat)
       path.closePath
+    case _ => assert(false, "Unexpected")
   }
 
   override def toString = "Staging.SaltireOutline(" + origin + "," + endpoint + "," + crossWidth + ")"

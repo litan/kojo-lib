@@ -12,7 +12,7 @@ object Main {
     import CanvasAPI._
     import TurtleAPI._
 
-    def spiral(size: Int, angle: Int) {
+    def spiral(size: Int, angle: Int): Unit = {
       if (size <= 300) {
         forward(size)
         right(angle)
