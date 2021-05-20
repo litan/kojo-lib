@@ -15,6 +15,7 @@ target/
 /bin/
 .idea/
 dist/
+dist-scala/
 Kojo.zip
 log
 **/.DS_Store

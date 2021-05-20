@@ -43,22 +43,30 @@ libraryDependencies ++= Seq(
 )
 
 //Build distribution
-val distOutpath             = settingKey[File]("Where to copy all dependencies and kojo")
+val distOutPath             = settingKey[File]("Where to copy all dependencies (except scala ones) and kojo")
+val distOutScalaPath             = settingKey[File]("Where to copy scala dependencies")
 val buildDist  = taskKey[Unit]("Copy runtime dependencies and built kojo to 'distOutpath'")
 
 lazy val dist = project
   .in(file("."))
   .settings(
-    distOutpath              := baseDirectory.value / "dist",
+    distOutPath              := baseDirectory.value / "dist",
+    distOutScalaPath         := baseDirectory.value / "dist-scala",
     buildDist   := {
       val allLibs:                List[File]          = dependencyClasspath.in(Runtime).value.map(_.data).filter(f => f.isFile && !f.getName.startsWith("scala")).toList
+      val scalaLibs:              List[File]          = dependencyClasspath.in(Runtime).value.map(_.data).filter(f => f.isFile && f.getName.startsWith("scala")).toList
       val buildArtifact:          File                = packageBin.in(Runtime).value
       val jars:                   List[File]          = buildArtifact :: allLibs
-      val `mappings src->dest`:   List[(File, File)]  = jars.map(f => (f, distOutpath.value / f.getName))
+      val scalaJars:              List[File]          = scalaLibs
+      val `mappings src->dest`:   List[(File, File)]  = jars.map(f => (f, distOutPath.value / f.getName))
+      val `mappings-scala src->dest`: List[(File, File)]  = scalaJars.map(f => (f, distOutScalaPath.value / f.getName))
       val log                                         = streams.value.log
-      log.info(s"Copying to ${distOutpath.value}:")
+      log.info(s"Copying jars to ${distOutPath.value}:")
       log.info(s"${`mappings src->dest`.map(f => s" * ${f._1}").mkString("\n")}")
       IO.copy(`mappings src->dest`)
+      log.info(s"Copying Scala jars to ${distOutScalaPath.value}:")
+      log.info(s"${`mappings-scala src->dest`.map(f => s" * ${f._1}").mkString("\n")}")
+      IO.copy(`mappings-scala src->dest`)
     }
   )
 
