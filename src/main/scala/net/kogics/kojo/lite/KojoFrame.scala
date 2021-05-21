@@ -48,6 +48,7 @@ class KojoFrame {
     frame.add(statusBar, BorderLayout.SOUTH)
 
     kojoCtx.frame = frame
+    kojoCtx.canvas = spriteCanvas
 
     frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE)
     frame.setExtendedState(Frame.NORMAL)

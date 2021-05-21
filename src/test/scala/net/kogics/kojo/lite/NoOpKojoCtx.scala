@@ -75,7 +75,7 @@ class NoOpKojoCtx extends core.KojoCtx {
   def baseFontSize: Int = 0
   def hiDpiFontIncrease: Int = 0
   def menuReady(m: JMenu): Unit = {}
-
+  def activateDrawingCanvas(): Unit = {}
   var fps = 50
   var screenDPI = 72
   def subKojo: Boolean = false

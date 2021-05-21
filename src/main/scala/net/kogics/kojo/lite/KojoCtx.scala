@@ -16,18 +16,20 @@
 package net.kogics.kojo
 package lite
 
-import net.kogics.kojo.core.{DelegatingSpriteListener, Picture, SpriteListener}
+import net.kogics.kojo.core.{DelegatingSpriteListener, SpriteListener}
+import net.kogics.kojo.lite.action.{FullScreenBaseAction, FullScreenCanvasAction, FullScreenSupport}
+import net.kogics.kojo.lite.canvas.SpriteCanvas
 import net.kogics.kojo.util.Utils
 
 import java.awt.{Color, Cursor, Font, Toolkit}
-import java.awt.geom.Point2D
 import java.util.prefs.Preferences
-import javax.swing.{JCheckBoxMenuItem, JFrame, JMenu, UIManager}
 import javax.swing.plaf.FontUIResource
+import javax.swing.{JCheckBoxMenuItem, JFrame, JMenu, UIManager}
 
 class KojoCtx extends core.KojoCtx {
   val prefs = Preferences.userRoot().node("Kojolite-Prefs")
   var frame: JFrame = _
+  var canvas: SpriteCanvas = _
   @volatile var fps = 50 // gets reset on clear
   @volatile var screenDPI = Toolkit.getDefaultToolkit.getScreenResolution
   var statusBar: StatusBar = _
@@ -85,6 +87,10 @@ class KojoCtx extends core.KojoCtx {
     //    }
   }
 
+  type ActionLike = FullScreenBaseAction
+  def fullScreenCanvasAction(): ActionLike = FullScreenCanvasAction(this)
+  def updateMenuItem(mi: JCheckBoxMenuItem, action: ActionLike) = FullScreenSupport.updateMenuItem(mi, action)
+
   def baseDir: String = getLastLoadStoreDir + "/"
 
   @volatile var lastLoadStoreDir = prefs.get("lastLoadStoreDir", "")
@@ -133,12 +139,11 @@ class KojoCtx extends core.KojoCtx {
     gp.setVisible(false)
   }
 
-  def picLine(p1: Point2D.Double, p2: Point2D.Double): Picture = {
-    // Todo
-    null
+  def activateDrawingCanvas() = Utils.runInSwingThread {
+    canvas.activate()
   }
 
   def repaintCanvas(): Unit = {
-    // Todo
+    canvas.repaint()
   }
 }

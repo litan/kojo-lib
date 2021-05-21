@@ -20,9 +20,9 @@ object Main {
       }
     }
 
-    size(20, 900)
-    setDrawingCanvasToA4()
+    toggleFullScreenCanvas()
     clear()
+    disablePanAndZoom()
     setPenColor(darkGray)
     setFillColor(green)
     setBackgroundH(red, yellow)

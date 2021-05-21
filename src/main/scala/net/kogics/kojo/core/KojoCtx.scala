@@ -30,6 +30,8 @@ trait KojoCtx {
   def activityListener: SpriteListener
   def setActivityListener(l: SpriteListener): Unit
   type ActionLike <: Action
+  def fullScreenCanvasAction(): ActionLike
+  def updateMenuItem(mi: JCheckBoxMenuItem, action: ActionLike): Unit
   def baseDir: String
   def frame: JFrame
   def getLastLoadStoreDir: String
@@ -47,12 +49,12 @@ trait KojoCtx {
   def showStatusCaretPos(line: Int, col: Int): Unit
   def showAppWaitCursor(): Unit
   def hideAppWaitCursor(): Unit
-  def picLine(p1: Point2D.Double, p2: Point2D.Double): Picture
   def repaintCanvas(): Unit
   def screenDpiFontDelta: Int
   def baseFontSize: Int
   def hiDpiFontIncrease: Int
   def menuReady(m: JMenu): Unit
+  def activateDrawingCanvas(): Unit
 
   var fps: Int
   var screenDPI: Int

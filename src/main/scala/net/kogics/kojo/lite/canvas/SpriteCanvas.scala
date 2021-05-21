@@ -788,7 +788,7 @@ class SpriteCanvas(val kojoCtx: core.KojoCtx) extends PSwingCanvas with SCanvas 
         // full screen windows get messed up with transparent color backgrounds
         // so set window background only if color is fully opaque 
         setBackgroundWrapper(color)
-      case _ =>
+      case _                                     =>
         val bounds = cbounds
         if (currentBackgroundRect != null) {
           currentBackgroundRect.erase()
@@ -979,7 +979,7 @@ class SpriteCanvas(val kojoCtx: core.KojoCtx) extends PSwingCanvas with SCanvas 
                     case Some(ps) => if (dim == "height") ps.heightInches else ps.widthInches
                     case None     => inchVal.toDouble
                   }
-                case None => 1.0
+                case None          => 1.0
               }
 
               if (dim == "height") {
@@ -1034,6 +1034,10 @@ class SpriteCanvas(val kojoCtx: core.KojoCtx) extends PSwingCanvas with SCanvas 
     })
     add(settingsItem)
 
+    val fsCanvasAction = kojoCtx.fullScreenCanvasAction()
+    val fullScreenItem: JCheckBoxMenuItem = new JCheckBoxMenuItem(fsCanvasAction)
+    add(fullScreenItem)
+
     addSeparator()
 
     add("<html><em>%s</em></html>" format (Utils.loadString("S_MouseActions")))
@@ -1043,8 +1047,7 @@ class SpriteCanvas(val kojoCtx: core.KojoCtx) extends PSwingCanvas with SCanvas 
         gridItem.setState(_showGrid)
         protItem.setState(_showProt)
         scaleItem.setState(_showScale)
-        // Todo - maybe
-        //        kojoCtx.updateMenuItem(fullScreenItem, fsCanvasAction)
+        kojoCtx.updateMenuItem(fullScreenItem, fsCanvasAction)
       }
 
       def popupMenuWillBecomeInvisible(e: PopupMenuEvent): Unit = {}

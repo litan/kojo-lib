@@ -321,6 +321,9 @@ class Builtins(
 
   def newMp3Player = new music.KMp3(kojoCtx)
 
+  private val fullScreenAction = kojoCtx.fullScreenCanvasAction()
+  def toggleFullScreenCanvas() = fullScreenAction.actionPerformed(null)
+
   //  def bounceVecOffStage(v: Vector2D, p: Picture): Vector2D =
   //    picture.bounceVecOffStage(v, p)
   def bouncePicVectorOffStage(p: Picture, v: Vector2D): Vector2D = bouncePicVectorOffPic(p, v, CanvasAPI.stageBorder)
