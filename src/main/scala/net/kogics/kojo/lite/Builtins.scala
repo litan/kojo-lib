@@ -26,7 +26,7 @@ import net.kogics.kojo.xscala.RepeatCommands
 
 import java.awt.geom.GeneralPath
 import java.awt.image.{BufferedImage, BufferedImageOp}
-import java.awt.{Graphics2D, Paint, Toolkit}
+import java.awt.{Dimension, Graphics2D, Paint, Toolkit}
 import java.net.URL
 import javax.swing.JComponent
 import scala.language.implicitConversions
@@ -234,8 +234,9 @@ class Builtins(
   }
 
   def setDrawingCanvasSize(width: Int, height: Int): Unit = Utils.runLaterInSwingThread {
-    kojoCtx.frame.setSize(width, height)
-    kojoCtx.frame.repaint()
+    // need to account for status bar size
+    kojoCtx.frame.getContentPane().setPreferredSize(new Dimension(width, height))
+    kojoCtx.frame.pack();
   }
 
   def setDrawingCanvasToA4(): Unit = {

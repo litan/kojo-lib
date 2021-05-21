@@ -19,10 +19,7 @@ import java.awt.{Frame, GraphicsEnvironment}
 import java.awt.event.ActionEvent
 import java.awt.event.KeyAdapter
 import java.awt.event.KeyEvent
-import javax.swing.JCheckBoxMenuItem
-import javax.swing.AbstractAction
-import javax.swing.JFrame
-import javax.swing.JComponent
+import javax.swing.{AbstractAction, JCheckBoxMenuItem, JComponent, JFrame, WindowConstants}
 import net.kogics.kojo.lite.KojoCtx
 import net.kogics.kojo.lite.canvas.SpriteCanvas
 import net.kogics.kojo.util.Utils
@@ -60,11 +57,12 @@ class FullScreenBaseAction(key: String, fsComp: => JComponent, oldFrame: => JFra
   def enterFullScreen(): Unit = {
     fullScreen = true
     fullScreenFrame = new JFrame
+    fullScreenFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE)
     fullScreenFrame.setUndecorated(true)
     fullScreenFrame.getContentPane.add(fsComp)
     sdev.setFullScreenWindow(fullScreenFrame)
     fullScreenFrame.validate()
-    oldFrame.setExtendedState(Frame.ICONIFIED)
+    oldFrame.setVisible(false)
 
     val escComp = fullScreenFrame.getMostRecentFocusOwner()
     if (escComp != null) {
@@ -83,13 +81,13 @@ class FullScreenBaseAction(key: String, fsComp: => JComponent, oldFrame: => JFra
     fullScreen = false
     sdev.setFullScreenWindow(null)
     fullScreenFrame.setVisible(false)
-    oldFrame.setExtendedState(Frame.NORMAL)
     oldFrame.add(fsComp)
+    oldFrame.setVisible(true)
     fsComp.revalidate()
   }
 
   // can also be called from the interp thread via the API
-  def actionPerformed(e: ActionEvent) = Utils.runInSwingThreadAndWait { 
+  def actionPerformed(e: ActionEvent) = Utils.runInSwingThreadAndWait {
     if (!isFullScreen) {
       if (!FullScreenSupport.isFullScreenOn) {
         enterFullScreen()

@@ -57,6 +57,37 @@ class KojoFrame {
 
     frame.setVisible(true)
   }
+
+  Utils.runInSwingThreadAndWait {
+    val b = builtins
+    import b._
+    import CanvasAPI._
+    import TurtleAPI._
+
+    cleari()
+
+    val bg = Picture {
+      def spiral(size: Int, angle: Int): Unit = {
+        if (size <= 300) {
+          forward(size)
+          right(angle)
+          spiral(size + 2, angle)
+        }
+      }
+
+      setPenColor(cm.lightBlue)
+      setPenThickness(1)
+      spiral(0, 91)
+    }
+    drawCentered(bg)
+
+    val pic = Picture.text("Welcome to Kojo...")
+    pic.setPenColor(cm.darkGray)
+    pic.setPenFontSize(30)
+    drawCentered(pic)
+  }
+  Thread.sleep(900)
+
   private def updateDefaultFonts(size: Int) = {
     val plain = new Font("SansSerif", 0, size)
     UIManager.put("ColorChooser.font", plain)

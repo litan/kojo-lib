@@ -1,6 +1,7 @@
 package net.kogics.kojo.driver
 
 import net.kogics.kojo.lite.KojoFrame
+import net.kogics.kojo.util.Utils
 
 object Main {
   def main(args: Array[String]): Unit = {
@@ -12,22 +13,33 @@ object Main {
     import CanvasAPI._
     import TurtleAPI._
 
-    def spiral(size: Int, angle: Int): Unit = {
-      if (size <= 300) {
-        forward(size)
-        right(angle)
-        spiral(size + 2, angle)
+    size(600, 600)
+    cleari()
+    originBottomLeft()
+    setSpeed(superFast)
+    setBackground(white)
+    setPenColor(black)
+
+    val tileCount = 10
+    val tileSize = cwidth / tileCount
+    println(cwidth, cheight)
+
+    def shape() {
+      repeat(4) {
+        forward(tileSize)
+        right(90)
       }
     }
 
-    toggleFullScreenCanvas()
-    clear()
-    disablePanAndZoom()
-    setPenColor(darkGray)
-    setFillColor(green)
-    setBackgroundH(red, yellow)
-    setPenThickness(1)
-    setSpeed(fast)
-    spiral(0, 91)
+    def block(posX: Double, posY: Double) {
+      setPosition(posX, posY)
+      shape()
+    }
+
+    repeatFor(rangeTill(0, cheight, tileSize)) { posY =>
+      repeatFor(rangeTill(0, cwidth, tileSize)) { posX =>
+        block(posX, posY)
+      }
+    }
   }
 }
