@@ -15,7 +15,7 @@
 
 package net.kogics.kojo.lite.action
 
-import java.awt.GraphicsEnvironment
+import java.awt.{Frame, GraphicsEnvironment}
 import java.awt.event.ActionEvent
 import java.awt.event.KeyAdapter
 import java.awt.event.KeyEvent
@@ -49,23 +49,24 @@ object FullScreenSupport {
   }
 }
 
-class FullScreenBaseAction(key: String, fsComp: => JComponent, fsCompHolder: => JFrame)
+class FullScreenBaseAction(key: String, fsComp: => JComponent, oldFrame: => JFrame)
   extends AbstractAction(key) {
   import FullScreenSupport._
-  var frame: JFrame = _
+  var fullScreenFrame: JFrame = _
   var fullScreen = false
 
   def isFullScreen = fullScreen
 
   def enterFullScreen(): Unit = {
     fullScreen = true
-    frame = new JFrame
-    frame.setUndecorated(true)
-    frame.getContentPane.add(fsComp)
-    sdev.setFullScreenWindow(frame)
-    frame.validate()
+    fullScreenFrame = new JFrame
+    fullScreenFrame.setUndecorated(true)
+    fullScreenFrame.getContentPane.add(fsComp)
+    sdev.setFullScreenWindow(fullScreenFrame)
+    fullScreenFrame.validate()
+    oldFrame.setExtendedState(Frame.ICONIFIED)
 
-    val escComp = frame.getMostRecentFocusOwner()
+    val escComp = fullScreenFrame.getMostRecentFocusOwner()
     if (escComp != null) {
       escComp.addKeyListener(new KeyAdapter {
         override def keyPressed(event: KeyEvent): Unit = {
@@ -81,8 +82,9 @@ class FullScreenBaseAction(key: String, fsComp: => JComponent, fsCompHolder: => 
   def leaveFullScreen(): Unit = {
     fullScreen = false
     sdev.setFullScreenWindow(null)
-    frame.setVisible(false)
-    fsCompHolder.add(fsComp)
+    fullScreenFrame.setVisible(false)
+    oldFrame.setExtendedState(Frame.NORMAL)
+    oldFrame.add(fsComp)
     fsComp.revalidate()
   }
 
