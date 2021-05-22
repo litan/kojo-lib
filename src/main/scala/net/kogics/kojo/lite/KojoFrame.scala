@@ -10,7 +10,7 @@ import java.awt.{BorderLayout, Dimension, Font, Frame}
 import javax.swing.plaf.FontUIResource
 import javax.swing.{JFrame, UIManager, WindowConstants}
 
-class KojoFrame {
+class KojoFrame(showLoading: Boolean = false) {
   if (Utils.isLinux) {
     System.setProperty("sun.java2d.xrender", "false")
   }
@@ -58,35 +58,19 @@ class KojoFrame {
     frame.setVisible(true)
   }
 
-  Utils.runInSwingThreadAndWait {
-    val b = builtins
-    import b._
-    import CanvasAPI._
-    import TurtleAPI._
+  if (showLoading) {
+    Utils.runInSwingThreadAndWait {
+      val b = builtins
+      import b._
+      import CanvasAPI._
+      import TurtleAPI._
 
-    cleari()
-
-    val bg = Picture {
-      def spiral(size: Int, angle: Int): Unit = {
-        if (size <= 300) {
-          forward(size)
-          right(angle)
-          spiral(size + 2, angle)
-        }
-      }
-
-      setPenColor(cm.lightBlue)
-      setPenThickness(1)
-      spiral(0, 91)
+      cleari()
+      val fig = Picture.image("/images/splash.png")
+      drawCentered(fig)
     }
-    drawCentered(bg)
-
-    //    val pic = Picture.text("Welcome to Kojo...")
-    //    pic.setPenColor(cm.darkGray)
-    //    pic.setPenFontSize(30)
-    //    drawCentered(pic)
+    Thread.sleep(700)
   }
-  Thread.sleep(700)
 
   private def updateDefaultFonts(size: Int) = {
     val plain = new Font("SansSerif", 0, size)
