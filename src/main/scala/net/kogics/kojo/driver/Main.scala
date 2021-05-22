@@ -13,33 +13,21 @@ object Main {
     import CanvasAPI._
     import TurtleAPI._
 
-    size(600, 600)
-    cleari()
-    originBottomLeft()
-    setSpeed(superFast)
-    setBackground(white)
-    setPenColor(black)
-
-    val tileCount = 10
-    val tileSize = cwidth / tileCount
-    println(cwidth, cheight)
-
-    def shape() {
-      repeat(4) {
-        forward(tileSize)
-        right(90)
+    def spiral(size: Int, angle: Int): Unit = {
+      if (size <= 300) {
+        forward(size)
+        right(angle)
+        spiral(size + 2, angle)
       }
     }
 
-    def block(posX: Double, posY: Double) {
-      setPosition(posX, posY)
-      shape()
-    }
-
-    repeatFor(rangeTill(0, cheight, tileSize)) { posY =>
-      repeatFor(rangeTill(0, cwidth, tileSize)) { posX =>
-        block(posX, posY)
-      }
-    }
+    clear()
+    disablePanAndZoom()
+    setPenColor(darkGray)
+    setFillColor(green)
+    setBackgroundH(red, yellow)
+    setPenThickness(1)
+    setSpeed(fast)
+    spiral(0, 91)
   }
 }
