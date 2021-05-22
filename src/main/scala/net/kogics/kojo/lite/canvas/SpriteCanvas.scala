@@ -1040,6 +1040,10 @@ class SpriteCanvas(val kojoCtx: core.KojoCtx) extends PSwingCanvas with SCanvas 
 
     addSeparator()
 
+    val aboutItem = new AboutMenu(kojoCtx).about
+    add(aboutItem)
+    addSeparator()
+
     add("<html><em>%s</em></html>" format (Utils.loadString("S_MouseActions")))
     addPopupMenuListener(new PopupMenuListener {
       def popupMenuWillBecomeVisible(e: PopupMenuEvent): Unit = {
