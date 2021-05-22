@@ -6,7 +6,7 @@ import net.kogics.kojo.staging
 import net.kogics.kojo.turtle.TurtleWorldAPI
 import net.kogics.kojo.util.Utils
 
-import java.awt.{BorderLayout, Font, Frame}
+import java.awt.{BorderLayout, Dimension, Font, Frame}
 import javax.swing.plaf.FontUIResource
 import javax.swing.{JFrame, UIManager, WindowConstants}
 
@@ -41,7 +41,7 @@ class KojoFrame {
     kojoCtx.statusBar = statusBar
     statusBar.showText("   ")
 
-    val frame = new JFrame("Kojo")
+    val frame = new JFrame("Kojo Canvas")
 
     frame.setLayout(new BorderLayout)
     frame.add(spriteCanvas, BorderLayout.CENTER)
@@ -50,11 +50,11 @@ class KojoFrame {
     kojoCtx.frame = frame
     kojoCtx.canvas = spriteCanvas
 
+    spriteCanvas.setPreferredSize(new Dimension(950, 700))
     frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE)
     frame.setExtendedState(Frame.NORMAL)
-    frame.setSize(950, 700)
-    //      frame.pack()
-
+    frame.pack()
+    frame.setLocationRelativeTo(null)
     frame.setVisible(true)
   }
 
@@ -81,12 +81,12 @@ class KojoFrame {
     }
     drawCentered(bg)
 
-    val pic = Picture.text("Welcome to Kojo...")
-    pic.setPenColor(cm.darkGray)
-    pic.setPenFontSize(30)
-    drawCentered(pic)
+    //    val pic = Picture.text("Welcome to Kojo...")
+    //    pic.setPenColor(cm.darkGray)
+    //    pic.setPenFontSize(30)
+    //    drawCentered(pic)
   }
-  Thread.sleep(900)
+  Thread.sleep(700)
 
   private def updateDefaultFonts(size: Int) = {
     val plain = new Font("SansSerif", 0, size)

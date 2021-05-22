@@ -17,13 +17,7 @@ package net.kogics.kojo.core
 
 import java.awt.Color
 import java.awt.geom.Point2D
-
-import javax.swing.Action
-import javax.swing.JCheckBoxMenuItem
-import javax.swing.JFrame
-
-import javax.swing.JMenu
-
+import javax.swing.{Action, JCheckBoxMenuItem, JComponent, JFrame, JMenu}
 import net.kogics.kojo.doodle
 
 trait KojoCtx {
@@ -34,6 +28,7 @@ trait KojoCtx {
   def updateMenuItem(mi: JCheckBoxMenuItem, action: ActionLike): Unit
   def baseDir: String
   def frame: JFrame
+  def canvas: JComponent
   def getLastLoadStoreDir: String
   def setLastLoadStoreDir(dir: String): Unit
   def lastColor: Color

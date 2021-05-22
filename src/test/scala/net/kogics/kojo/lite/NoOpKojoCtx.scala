@@ -6,7 +6,7 @@ import net.kogics.kojo.util.Utils
 
 import java.awt.Color
 import java.awt.geom.Point2D
-import javax.swing.{Action, JCheckBoxMenuItem, JFrame, JMenu}
+import javax.swing.{Action, JCheckBoxMenuItem, JComponent, JFrame, JMenu}
 
 /**A Kojo context, which does nothing. Useful for test drivers.*/
 class NoOpKojoCtx extends core.KojoCtx {
@@ -26,6 +26,7 @@ class NoOpKojoCtx extends core.KojoCtx {
   def stopStory(): Unit = {}
   def scrollOutputToEnd(): Unit = {}
   def frame: JFrame = null
+  def canvas: JComponent = null
   def fileOpened(file: java.io.File): Unit = {}
   def fileModified(): Unit = {}
   def fileSaved(): Unit = {}

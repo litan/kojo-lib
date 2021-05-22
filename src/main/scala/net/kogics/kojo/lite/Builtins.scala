@@ -234,8 +234,7 @@ class Builtins(
   }
 
   def setDrawingCanvasSize(width: Int, height: Int): Unit = Utils.runLaterInSwingThread {
-    // need to account for status bar size
-    kojoCtx.frame.getContentPane().setPreferredSize(new Dimension(width, height))
+    kojoCtx.canvas.setPreferredSize(new Dimension(width, height))
     kojoCtx.frame.pack();
   }
 
