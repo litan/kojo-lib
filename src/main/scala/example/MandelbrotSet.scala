@@ -86,13 +86,13 @@ object MandelbrotSet {
       installMouseHandlers(pic)
       var dragSq: Picture = Picture.rect(0, 0)
 
-      def installMouseHandlers(p: Picture) {
+      def installMouseHandlers(p: Picture): Unit = {
         p.onMouseDrag { (x, y) =>
           val delx = x - pressxy._1
           val dely = y - pressxy._2
           val del = math.max(delx.abs, dely.abs)
-          val newx = pressxy._1 + del * delx.signum
-          val newy = pressxy._2 + del * dely.signum
+          val newx = pressxy._1 + del * delx.sign
+          val newy = pressxy._2 + del * dely.sign
           dragSq.erase()
           dragSq = trans(math.min(newx, pressxy._1), math.min(newy, pressxy._2)) -> Picture.rect(del, del)
           draw(dragSq)

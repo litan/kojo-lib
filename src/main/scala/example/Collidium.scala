@@ -53,7 +53,7 @@ object Collidium {
     import collection.mutable.ArrayBuffer
     def line(ps: ArrayBuffer[Point], c: Color) = Picture {
       val sqsz = 4
-      def sq() {
+      def sq() = {
         hop(-sqsz / 2)
         repeat(4) {
           forward(sqsz)

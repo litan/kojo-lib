@@ -76,13 +76,13 @@ object DemoPlatformer {
         var speedY = -1.0
         var inJump = false
 
-        def step() {
+        def step() = {
           stepCollisions()
           stepFood()
         }
 
         var goalEnabled = false
-        def stepFood() {
+        def stepFood() = {
           if (currentPic.collidesWith(halfwayGoal)) {
             halfwayGoal.erase()
             goal.setOpacity(1)
@@ -97,7 +97,7 @@ object DemoPlatformer {
           }
         }
 
-        def stepCollisions() {
+        def stepCollisions() = {
           if (isKeyPressed(Kc.VK_RIGHT)) {
             facingRight = true
             updateImage(runningRight)
@@ -162,7 +162,7 @@ object DemoPlatformer {
         }
 
         var cb = canvasBounds
-        def scrollIfNeeded() {
+        def scrollIfNeeded() = {
           val threshold = 200
           val pos = currentPic.position
           if (cb.x + cb.width - pos.x < threshold) {
@@ -175,7 +175,7 @@ object DemoPlatformer {
           }
         }
 
-        def updateImage(newPic: BatchPics) {
+        def updateImage(newPic: BatchPics) = {
           if (newPic != currentPic) {
             currentPic.invisible()
             newPic.visible()
@@ -184,7 +184,7 @@ object DemoPlatformer {
           }
         }
 
-        def draw() {
+        def draw() = {
           drawAndHide(stillLeft, runningRight, runningLeft, jumpingRight, jumpingLeft)
           currentPic.draw()
         }
@@ -208,7 +208,7 @@ object DemoPlatformer {
         //    var speedX = 0.0
         var speedY = -2.0
 
-        def step() {
+        def step() = {
           speedY += gravity
           speedY = math.max(speedY, -10)
           currentPic.translate(0, speedY)
@@ -223,7 +223,7 @@ object DemoPlatformer {
           }
         }
 
-        def updateImage(newPic: BatchPics) {
+        def updateImage(newPic: BatchPics) = {
           if (newPic != currentPic) {
             currentPic.invisible()
             newPic.visible()
@@ -232,7 +232,7 @@ object DemoPlatformer {
           }
         }
 
-        def draw() {
+        def draw() = {
           currentPic.draw()
         }
       }

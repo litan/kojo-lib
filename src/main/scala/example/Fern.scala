@@ -13,7 +13,7 @@ object Fern {
 
     // `Fern` sample from Kojo Showcase menu
 
-    def fern(x: Double) {
+    def fern(x: Double): Unit = {
       if (x > 1) {
         saveStyle()
         setPenThickness(x / 10 + 1)

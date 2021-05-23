@@ -43,14 +43,14 @@ object CarRide {
       val bplayer = newMp3Player
       val cplayer = newMp3Player
 
-      def createCar() {
+      def createCar() = {
         val c = trans(player.position.x + randomNormalDouble * cb.width / 10, cb.y + cb.height) ->
           car("/media/car-ride/car2.png")
         draw(c)
         cars += c -> Vector2D(0, -carSpeed)
       }
       val markers = collection.mutable.Set.empty[Picture]
-      def createMarker() {
+      def createMarker() = {
         val mwidth = 20
         val m = fillColor(white) * penColor(white) *
           trans(cb.x + cb.width / 2 - mwidth / 2, cb.y + cb.height) -> Picture.rect(markerHeight, mwidth)
@@ -155,11 +155,11 @@ object CarRide {
       def energyText = s"Energy: $energyLevel"
       val energyLabel = Picture.textu(energyText, 20, ColorMaker.aquamarine)
       energyLabel.translate(cb.x + 10, cb.y + cb.height - 10)
-      def updateEnergyTick() {
+      def updateEnergyTick() = {
         energyLevel += 2
         energyLabel.update(energyText)
       }
-      def updateEnergyCrash() {
+      def updateEnergyCrash() = {
         energyLevel -= 10
         energyLabel.update(energyText)
         if (energyLevel < 0) {
@@ -168,7 +168,7 @@ object CarRide {
         }
       }
 
-      def manageGameScore() {
+      def manageGameScore() = {
         var gameTime = 0
         val timeLabel = Picture.textu(gameTime, 20, ColorMaker.azure)
         timeLabel.translate(cb.x + 10, cb.y + 50)
