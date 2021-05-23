@@ -37,7 +37,7 @@ object TicTacToeUnbeatable {
       val len2 = len - 2 * margin
       val lineWidth = 8
 
-      def background() {
+      def background() = {
         setPenColor(noColor)
         setFillColor(black)
         val mgn = lineWidth / 2
@@ -195,7 +195,7 @@ object TicTacToeUnbeatable {
         bestMove
       }
 
-      def doMove(x: Int, y: Int, move: Int, newPic: Picture) {
+      def doMove(x: Int, y: Int, move: Int, newPic: Picture) = {
         newPic.setPosition(bx + x * len, by + y * len)
         boardState(x)(y) = move
         nextCross = !nextCross
@@ -208,13 +208,13 @@ object TicTacToeUnbeatable {
 
       }
 
-      def doComputerMove(pic: Picture) {
+      def doComputerMove(pic: Picture) = {
         val move = findBestMove
         val newPic = o
         doMove(move.x, move.y, Computer, newPic)
       }
 
-      def drawBoard() {
+      def drawBoard() = {
         lines.setPosition(bx, by)
         draw(lines)
         repeatFor(0 until 3) { x =>
@@ -271,7 +271,7 @@ object TicTacToeUnbeatable {
         win
       }
 
-      def gameOver(msg: String) {
+      def gameOver(msg: String) = {
         val pmsg = Picture {
           setPenFontSize(80)
           setPenColor(white)
@@ -282,7 +282,7 @@ object TicTacToeUnbeatable {
         done = true
       }
 
-      def checkWin() {
+      def checkWin() = {
         if (checkWinFor(Computer)) {
           gameOver("O Won")
         }
@@ -291,7 +291,7 @@ object TicTacToeUnbeatable {
         }
       }
 
-      def checkDraw() {
+      def checkDraw() = {
         var filled = true
         repeatFor(0 until 3) { x =>
           repeatFor(0 until 3) { y =>
