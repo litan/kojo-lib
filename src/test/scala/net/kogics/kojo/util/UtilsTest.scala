@@ -12,46 +12,7 @@ import java.util.Locale
 class UtilsTest extends JUnitSuite with org.scalatest.Matchers {
   
   val kojoCtx = new NoOpKojoCtx
-  
-  
-  @Test def loadLocalizedResourceExistingGerman(): Unit ={
-    //Given
-    val existingRoot = "/samples/"
-    val existingGermanFile = "tree1.kojo"
-    val oldLocale = Locale.getDefault
-    Locale.setDefault(Locale.GERMAN)
-    try{
-      //When
-      val result = Utils.loadLocalizedResource(existingRoot, existingGermanFile)
-      //Then
-      if(result eq null){
-        fail(s"Root $existingRoot, File $existingGermanFile")
-      }
-      result should include ("rot importieren")
-    }finally{
-      Locale.setDefault(oldLocale)
-    }
-  }
-  
-  @Test def loadLocalizedResourceExistingOnlyInBaseLanguage(): Unit ={
-    //Given
-    val existingRoot = "/samples/"
-    val existingBaseFile = "some-notes.kojo"
-    val oldLocale = Locale.getDefault
-    Locale.setDefault(Locale.GERMAN)
-    try{
-      //When
-      val result = Utils.loadLocalizedResource(existingRoot, existingBaseFile)
-      //Then
-      if(result eq null){
-        fail(s"Root $existingRoot, File $existingBaseFile")
-      }
-      result should include ("Acoustic_Bass_Drum")
-    }finally{
-      Locale.setDefault(oldLocale)
-    }
-  }
-  
+
   @Test def loadLocalizedResourceNotExisting(): Unit ={
     //Given
     val existingRoot = "/samples/"
