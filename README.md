@@ -7,14 +7,17 @@ Kojo-Lib provides [Kojo](www.kojo.in) (the Scala based learning environment) as 
 ## Quick Start
 - Clone this repo.
 - Go into the repo dir in a terminal.
-- run `./sbt.sh buildDist`
+- run `./sbt.sh buildDist`.
 
 This will give you two folders of interest:
 - `dist` - which contains jars that you can use (on the classpath) with any JVM language.
 - `dist-scala` - which contains a couple of Scala jars that you need to include in your classpath for any language other than Scala.
 
-### Sample client programs
-- [In Scala](https://github.com/litan/kojo-lib/blob/main/src/main/scala/net/kogics/kojo/driver/Main.scala)
-- [In Java](https://github.com/litan/kojo-lib/blob/main/src/main/java/net/kogics/kojo/driver/Main4Java.java)
+### Minimal sample client programs
+- [In Scala](https://github.com/litan/kojo-lib/blob/main/src/main/scala/driver/Main.scala)
+- [In Java](https://github.com/litan/kojo-lib/blob/main/src/main/java/driver/Main4Java.java)
+
+### Examples from the Kojo Showcase menu
+- [Examples folder in this repo](https://github.com/litan/kojo-lib/tree/main/src/main/scala/example)
 
 Enjoy!
