@@ -17,7 +17,12 @@ This will give you two folders of interest:
 - [In Scala](https://github.com/litan/kojo-lib/blob/main/src/main/scala/driver/Main.scala)
 - [In Java](https://github.com/litan/kojo-lib/blob/main/src/main/java/driver/Main4Java.java)
 
-### Examples from the Kojo Showcase menu
+### Examples - from the Kojo Showcase menu and more
 - [Examples folder in this repo](https://github.com/litan/kojo-lib/tree/main/src/main/scala/example)
+
+## Published artifacts
+Coming soon (jars published on maven central).
+
+---
 
 Enjoy!
