@@ -10,31 +10,38 @@ import java.awt.{BorderLayout, Dimension, Font, Frame}
 import javax.swing.plaf.FontUIResource
 import javax.swing.{JFrame, UIManager, WindowConstants}
 
-object FrameCount {
-  @volatile var count = 0
-  def incrementCount(): Unit = {
-    count += 1
-    if (count > 1) {
+object KojoFrame {
+  @volatile var instanceCount = 0
+  def incrementInstanceCount(): Unit = {
+    instanceCount += 1
+    if (instanceCount > 1) {
       assert(false, "Only one instance of KojoFrame is allowed per process")
     }
   }
+
+  def create(): KojoFrame = {
+    incrementInstanceCount()
+    val kf = new KojoFrame(950, 700, false)
+    kf.show()
+    kf
+  }
+
+  def create(width: Int = 950, height: Int = 700): KojoFrame = {
+    incrementInstanceCount()
+    val kf = new KojoFrame(width, height, false)
+    kf.show()
+    kf
+  }
+
+  def create(showLoading: Boolean): KojoFrame = {
+    incrementInstanceCount()
+    val kf = new KojoFrame(950, 700, showLoading)
+    kf.show()
+    kf
+  }
 }
 
-class KojoFrame(width: Int, height: Int, showLoading: Boolean) {
-  def this() = {
-    this(950, 700, false)
-  }
-
-  def this(width: Int = 950, height: Int = 700) = {
-    this(width, height, false)
-  }
-
-  def this(showLoading: Boolean) = {
-    this(950, 700, showLoading)
-  }
-
-  FrameCount.incrementCount()
-
+class KojoFrame private (width: Int, height: Int, showLoading: Boolean) {
   if (Utils.isLinux) {
     System.setProperty("sun.java2d.xrender", "false")
   }

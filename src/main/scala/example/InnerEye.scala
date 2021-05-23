@@ -4,9 +4,7 @@ import net.kogics.kojo.lite.KojoFrame
 
 object InnerEye {
   def main(args: Array[String]): Unit = {
-
-    val kojo = new KojoFrame()
-    kojo.show()
+    val kojo = KojoFrame.create()
     val builtins = kojo.builtins
 
     import builtins._

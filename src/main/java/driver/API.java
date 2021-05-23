@@ -6,10 +6,7 @@ import net.kogics.kojo.lite.KojoFrame;
 import net.kogics.kojo.turtle.TurtleWorldAPI;
 
 class API {
-    static KojoFrame kojo = new KojoFrame();
-    static {
-        kojo.show();
-    }
+    static KojoFrame kojo = KojoFrame.create(true);
     static Builtins b = kojo.builtins();
     static TurtleWorldAPI t = b.TurtleAPI();
     static DrawingCanvasAPI c = b.CanvasAPI();

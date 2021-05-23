@@ -5,9 +5,7 @@ import net.kogics.kojo.util.Utils
 
 object Main {
   def main(args: Array[String]): Unit = {
-
-    val kojo = new KojoFrame()
-    kojo.show()
+    val kojo = KojoFrame.create()
     val builtins = kojo.builtins
 
     import builtins._
