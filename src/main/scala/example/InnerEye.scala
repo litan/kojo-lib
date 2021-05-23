@@ -11,6 +11,8 @@ object InnerEye {
     import CanvasAPI._
     import TurtleAPI._
 
+    // `Inner Eye` sample from Kojo Showcase menu
+
     clear()
     setSpeed(superFast)
     setBackgroundH(cm.rgb(0, 0, 0), blue)
