@@ -10,66 +10,93 @@ import java.awt.{BorderLayout, Dimension, Font, Frame}
 import javax.swing.plaf.FontUIResource
 import javax.swing.{JFrame, UIManager, WindowConstants}
 
-class KojoFrame(showLoading: Boolean = false) {
+object FrameCount {
+  @volatile var count = 0
+  def incrementCount(): Unit = {
+    count += 1
+    if (count > 1) {
+      assert(false, "Only one instance of KojoFrame is allowed per process")
+    }
+  }
+}
+
+class KojoFrame(width: Int, height: Int, showLoading: Boolean) {
+  def this() = {
+    this(950, 700, false)
+  }
+
+  def this(width: Int = 950, height: Int = 700) = {
+    this(width, height, false)
+  }
+
+  def this(showLoading: Boolean) = {
+    this(950, 700, showLoading)
+  }
+
+  FrameCount.incrementCount()
+
   if (Utils.isLinux) {
     System.setProperty("sun.java2d.xrender", "false")
   }
 
   val kojoCtx = new KojoCtx // context needs to be created right up front to set user language
-  Utils.runInSwingThreadAndWait {
-    updateDefaultFonts(12 + kojoCtx.screenDpiFontDelta)
-    loadLookAndFeel()
-    kojoCtx.lookAndFeelReady()
 
-    val spriteCanvas = new SpriteCanvas(kojoCtx)
-    val Tw = new TurtleWorldAPI(spriteCanvas.turtle0)
-    val TSCanvas = new DrawingCanvasAPI(spriteCanvas)
-    val Staging = new staging.API(spriteCanvas)
-    val mp3player = new KMp3(kojoCtx)
-    val fuguePlayer = new FuguePlayer(kojoCtx)
-
-    val builtins = new Builtins(
-      TSCanvas,
-      Tw,
-      Staging,
-      mp3player,
-      fuguePlayer,
-      kojoCtx
-    )
-
-    val statusBar = new StatusBar
-    kojoCtx.statusBar = statusBar
-    statusBar.showText("   ")
-
-    val frame = new JFrame("Kojo Canvas")
-
-    frame.setLayout(new BorderLayout)
-    frame.add(spriteCanvas, BorderLayout.CENTER)
-    frame.add(statusBar, BorderLayout.SOUTH)
-
-    kojoCtx.frame = frame
-    kojoCtx.canvas = spriteCanvas
-
-    spriteCanvas.setPreferredSize(new Dimension(950, 700))
-    frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE)
-    frame.setExtendedState(Frame.NORMAL)
-    frame.pack()
-    frame.setLocationRelativeTo(null)
-    frame.setVisible(true)
-  }
-
-  if (showLoading) {
+  def show(): Unit = {
     Utils.runInSwingThreadAndWait {
-      val b = builtins
-      import b._
-      import CanvasAPI._
-      import TurtleAPI._
+      updateDefaultFonts(12 + kojoCtx.screenDpiFontDelta)
+      loadLookAndFeel()
+      kojoCtx.lookAndFeelReady()
 
-      cleari()
-      val fig = Picture.image("/images/splash.png")
-      drawCentered(fig)
+      val spriteCanvas = new SpriteCanvas(kojoCtx)
+      val Tw = new TurtleWorldAPI(spriteCanvas.turtle0)
+      val TSCanvas = new DrawingCanvasAPI(spriteCanvas)
+      val Staging = new staging.API(spriteCanvas)
+      val mp3player = new KMp3(kojoCtx)
+      val fuguePlayer = new FuguePlayer(kojoCtx)
+
+      val builtins = new Builtins(
+        TSCanvas,
+        Tw,
+        Staging,
+        mp3player,
+        fuguePlayer,
+        kojoCtx
+      )
+
+      val statusBar = new StatusBar
+      kojoCtx.statusBar = statusBar
+      statusBar.showText("   ")
+
+      val frame = new JFrame("Kojo Canvas")
+
+      frame.setLayout(new BorderLayout)
+      frame.add(spriteCanvas, BorderLayout.CENTER)
+      frame.add(statusBar, BorderLayout.SOUTH)
+
+      kojoCtx.frame = frame
+      kojoCtx.canvas = spriteCanvas
+
+      spriteCanvas.setPreferredSize(new Dimension(width, height))
+      frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE)
+      frame.setExtendedState(Frame.NORMAL)
+      frame.pack()
+      frame.setLocationRelativeTo(null)
+      frame.setVisible(true)
     }
-    Thread.sleep(700)
+
+    if (showLoading) {
+      Utils.runInSwingThreadAndWait {
+        val b = builtins
+        import b._
+        import CanvasAPI._
+        import TurtleAPI._
+
+        cleari()
+        val fig = Picture.image("/images/splash.png")
+        drawCentered(fig)
+      }
+      Thread.sleep(700)
+    }
   }
 
   private def updateDefaultFonts(size: Int) = {
