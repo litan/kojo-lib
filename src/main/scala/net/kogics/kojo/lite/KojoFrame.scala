@@ -26,7 +26,7 @@ object KojoFrame {
     kf
   }
 
-  def create(width: Int = 950, height: Int = 700): KojoFrame = {
+  def create(width: Int, height: Int): KojoFrame = {
     incrementInstanceCount()
     val kf = new KojoFrame(width, height, false)
     kf.show()
@@ -36,6 +36,13 @@ object KojoFrame {
   def create(showLoading: Boolean): KojoFrame = {
     incrementInstanceCount()
     val kf = new KojoFrame(950, 700, showLoading)
+    kf.show()
+    kf
+  }
+
+  def create(width: Int, height: Int, showLoading: Boolean): KojoFrame = {
+    incrementInstanceCount()
+    val kf = new KojoFrame(width, height, showLoading)
     kf.show()
     kf
   }
