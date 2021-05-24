@@ -14,7 +14,7 @@ This will give you two folders of interest:
 - `dist-scala` - which contains a couple of Scala jars that you need to include in your classpath for any language other than Scala.
 
 ### Minimal sample client programs
-- [In Scala 3](https://github.com/litan/kojo-lib-scala3samples/blob/main/src/main/scala/Main.scala)
+- [In Scala 3](https://github.com/litan/kojo-lib-scala3samples/blob/main/src/main/scala/example/Main.scala)
 - [In Scala 2.13.x](https://github.com/litan/kojo-lib/blob/main/src/main/scala/driver/Main.scala)
 - [In Java](https://github.com/litan/kojo-lib/blob/main/src/main/java/driver/Main4Java.java)
 
