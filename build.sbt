@@ -1,15 +1,13 @@
 name := "Kojo Lib"
 
-version := "2.9"
+version := "0.1"
 
 scalaVersion := "2.13.5"
 
-fork in run := true
-
 scalacOptions := Seq("-feature", "-deprecation")
-javaOptions in run ++= Seq("-Xmx1024m", "-Xss1m", "-XX:+UseConcMarkSweepGC", "-XX:+CMSClassUnloadingEnabled")
+run / javaOptions ++= Seq("-Xmx1024m", "-Xss1m")
 
-fork in Test := false
+Test / fork := false
 
 testOptions += Tests.Argument(TestFrameworks.JUnit, "-v", "-s")
 
