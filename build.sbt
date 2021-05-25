@@ -2,7 +2,7 @@ name := "kojo-lib"
 
 version := "0.1"
 
-scalaVersion := "2.13.5"
+scalaVersion := "2.13.6"
 
 scalacOptions := Seq("-feature", "-deprecation")
 run / javaOptions ++= Seq("-Xmx1024m", "-Xss1m")
@@ -16,7 +16,7 @@ testOptions += Tests.Argument(TestFrameworks.JUnit, "-v", "-s")
 autoScalaLibrary := true
 
 libraryDependencies ++= Seq(
-    "org.scala-lang" % "scala-reflect" % "2.13.3" % "test",
+    "org.scala-lang" % "scala-reflect" % "2.13.6" % "test",
     "org.scala-lang.modules" % "scala-xml_2.13" % "1.3.0" % "test",
     "com.typesafe.akka" % "akka-actor_2.13" % "2.5.29",
     "org.piccolo2d" % "piccolo2d-core" % "1.3.1",
