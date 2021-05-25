@@ -1,4 +1,4 @@
-name := "Kojo Lib"
+name := "kojo-lib"
 
 version := "0.1"
 
@@ -73,5 +73,7 @@ Compile / packageOptions +=
 
 // packageBin / packageOptions +=
 //     Package.ManifestAttributes("Permissions" -> "all-permissions", "Application-Name" -> "KojoLib")
+    
+assembly / logLevel := Level.Info
     
 ThisBuild / publishMavenStyle := false    
