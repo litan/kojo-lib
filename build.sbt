@@ -49,9 +49,9 @@ lazy val dist = project
     distOutPath              := baseDirectory.value / "dist",
     distOutScalaPath         := baseDirectory.value / "dist-scala",
     buildDist   := {
-      val allLibs:                List[File]          = dependencyClasspath.in(Runtime).value.map(_.data).filter(f => f.isFile && !f.getName.startsWith("scala")).toList
-      val scalaLibs:              List[File]          = dependencyClasspath.in(Runtime).value.map(_.data).filter(f => f.isFile && f.getName.startsWith("scala")).toList
-      val buildArtifact:          File                = packageBin.in(Runtime).value
+      val allLibs:                List[File]          = (Runtime / dependencyClasspath).value.map(_.data).filter(f => f.isFile && !f.getName.startsWith("scala")).toList
+      val scalaLibs:              List[File]          = (Runtime / dependencyClasspath).value.map(_.data).filter(f => f.isFile && f.getName.startsWith("scala")).toList
+      val buildArtifact:          File                = Runtime / packageBin value
       val jars:                   List[File]          = buildArtifact :: allLibs
       val scalaJars:              List[File]          = scalaLibs
       val `mappings src->dest`:   List[(File, File)]  = jars.map(f => (f, distOutPath.value / f.getName))
@@ -68,7 +68,10 @@ lazy val dist = project
 
 //libraryDependencies += "com.novocode" % "junit-interface" % "0.10-M2" % "test"
 
-packageOptions in (Compile, packageBin) +=
-    Package.ManifestAttributes("Permissions" -> "all-permissions", "Application-Name" -> "Kojo")
+Compile / packageOptions +=
+    Package.ManifestAttributes("Permissions" -> "all-permissions", "Application-Name" -> "KojoLib")
+
+// packageBin / packageOptions +=
+//     Package.ManifestAttributes("Permissions" -> "all-permissions", "Application-Name" -> "KojoLib")
     
-publishMavenStyle in ThisBuild := false    
+ThisBuild / publishMavenStyle := false    
