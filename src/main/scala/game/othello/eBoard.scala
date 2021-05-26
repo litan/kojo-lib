@@ -1,4 +1,5 @@
-package othello
+package game.othello
+// depends only on cboard (and types)
 
 class MoveCount { // the count of the next move counting from 1, 2, 3...
     private var count: Int = _

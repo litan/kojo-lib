@@ -1,4 +1,5 @@
-package othello
+package game.othello
+// depends only on types
 
 import scala.collection.mutable.ArrayBuffer
 

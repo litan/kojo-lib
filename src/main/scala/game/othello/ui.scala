@@ -1,4 +1,5 @@
-package othello
+package game.othello
+// depends on history (and eBoard) and alphaBetaSearch
 
 import net.kogics.kojo.lite.KojoFrame
 
@@ -7,12 +8,10 @@ class UI(
   board:         EBoard,
   history:       History,
   computerPlays: Stone) {
-  val builtins = kojo.builtins
 
+  val builtins = kojo.builtins
   import builtins._
   import CanvasAPI._
-
-  // def clear() = kojo.clear()
 
   val length = 90 // size of squares on the board
   val (llx, lly) = (-board.size / 2 * length, -board.size / 2 * length)
@@ -304,7 +303,7 @@ class UI(
 
   //if (computerInPlay) computerToMove // todo: we get an empty screen while the computer computes the first move!
 
-  // nesting is needed for Picture and colors like: red, pink, etc..
+  // nesting is needed for imported types and vals like Picture and colors (red, pink, etc..)
   class HintPics(length: Int) {
     var show = true
     def turnOn = { show = true }

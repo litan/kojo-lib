@@ -1,4 +1,4 @@
-package othello
+package game.othello
 //uses only types and board
 
 class State(val board: Board, val turn: Stone) {
