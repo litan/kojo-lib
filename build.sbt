@@ -13,10 +13,11 @@ testOptions += Tests.Argument(TestFrameworks.JUnit, "-v", "-s")
 
 // parallelExecution in Test := false
 
-autoScalaLibrary := true
+autoScalaLibrary := false
 
 libraryDependencies ++= Seq(
-    "org.scala-lang" % "scala-reflect" % "2.13.6" % "test",
+    "org.scala-lang" % "scala-library" % scalaVersion.value,
+    "org.scala-lang" % "scala-reflect" % scalaVersion.value % "test",
     "org.scala-lang.modules" % "scala-xml_2.13" % "1.3.0" % "test",
     "com.typesafe.akka" % "akka-actor_2.13" % "2.5.29",
     "org.piccolo2d" % "piccolo2d-core" % "1.3.1",
@@ -75,5 +76,6 @@ Compile / packageOptions +=
 //     Package.ManifestAttributes("Permissions" -> "all-permissions", "Application-Name" -> "KojoLib")
     
 assembly / logLevel := Level.Info
-    
-ThisBuild / publishMavenStyle := false    
+assembly / assemblyOption := (assembly / assemblyOption).value.copy(includeScala = false)
+
+ThisBuild / publishMavenStyle := false
