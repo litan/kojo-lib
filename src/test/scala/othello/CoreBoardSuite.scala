@@ -1,4 +1,4 @@
-package othello
+package game.othello
 
 import org.junit.runner.RunWith
 import org.scalacheck.Prop.forAll
@@ -10,7 +10,7 @@ import org.scalatest.junit.JUnitRunner
 
 @RunWith(classOf[JUnitRunner])
 @annotation.nowarn
-class CoreBoardTestSuite extends FunSuite with Matchers {
+class OthelloCoreBoardTestSuite extends FunSuite with Matchers {
   val foo1 = new FooBoard()
   test("inital cell counts") {
     foo1.count(White) shouldBe 0

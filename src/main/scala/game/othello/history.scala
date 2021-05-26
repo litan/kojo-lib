@@ -1,4 +1,5 @@
-package othello
+package game.othello
+// depends on types and eBoard
 
 import scala.collection.mutable.ArrayBuffer
 

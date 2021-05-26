@@ -1,4 +1,5 @@
-package othello
+package game.othello
+// depends on ui (and types and all others ui depend on)
 
 import net.kogics.kojo.lite.KojoFrame
 

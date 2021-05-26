@@ -1,4 +1,4 @@
-package othello
+package game.othello
 
 object Util {
     // thanks to CoreBuiltins.scala

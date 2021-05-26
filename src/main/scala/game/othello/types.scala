@@ -1,4 +1,4 @@
-package othello
+package game.othello
 
 trait Stone {
     val name = "stone"

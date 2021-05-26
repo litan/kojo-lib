@@ -1,4 +1,4 @@
-package othello
+package game.othello
 
 import org.junit.runner.RunWith
 import org.scalacheck.Prop.forAll
@@ -10,7 +10,7 @@ import org.scalatest.junit.JUnitRunner
 
 @RunWith(classOf[JUnitRunner])
 @annotation.nowarn
-class AlphaBetaTestSuite extends FunSuite with Matchers {
+class OthelloAlphaBetaTestSuite extends FunSuite with Matchers {
 
   class Game(size: Int) {
     val b = Board.newBoard(size)

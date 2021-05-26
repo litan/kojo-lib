@@ -1,4 +1,5 @@
-package othello
+package game.othello
+// uses only cboard
 
 // this board is used only in alpha-beta search
 object Board {

@@ -1,4 +1,4 @@
-package othello
+package game.othello
 
 import org.junit.runner.RunWith
 import org.scalacheck.Prop.forAll
@@ -10,7 +10,7 @@ import org.scalatest.junit.JUnitRunner
 
 @RunWith(classOf[JUnitRunner])
 @annotation.nowarn
-class EBoardTestSuite extends FunSuite with Matchers {
+class OthelloEBoardTestSuite extends FunSuite with Matchers {
   val board = new EBoard(8, Black, 0)
   test("8x8 e-board") {
     true shouldBe true
