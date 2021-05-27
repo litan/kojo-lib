@@ -18,8 +18,14 @@ This will give you two folders of interest:
 - [In Scala 2.13.x](https://github.com/litan/kojo-lib/blob/main/src/main/scala/driver/Main.scala)
 - [In Java](https://github.com/litan/kojo-lib/blob/main/src/main/java/driver/Main4Java.java)
 
-### Examples - from the Kojo Showcase menu and more
-- [Examples folder in this repo](https://github.com/litan/kojo-lib/tree/main/src/main/scala/example)
+### Examples (mostly from the Kojo Showcase menu)
+- [Inner Eye](https://github.com/litan/kojo-lib/blob/main/src/main/scala/example/InnerEye.scala)
+- [Mandelbrot Set](https://github.com/litan/kojo-lib/blob/main/src/main/scala/example/MandelbrotSet.scala)
+- [Car Ride](https://github.com/litan/kojo-lib/blob/main/src/main/scala/example/CarRide.scala)
+- [Platformer Game](https://github.com/litan/kojo-lib/blob/main/src/main/scala/example/DemoPlatformer.scala)
+- [Unbeatable Tic Tac Toe](https://github.com/litan/kojo-lib/blob/main/src/main/scala/example/TicTacToeUnbeatable.scala)  
+- [Othello](https://github.com/litan/kojo-lib/blob/main/src/main/scala/game/othello/main.scala)
+- [And more...](https://github.com/litan/kojo-lib/tree/main/src/main/scala/example)
 
 ## Published artifacts
 Coming soon (jars published on maven central).
