@@ -7,7 +7,7 @@ scalaVersion := "2.13.6"
 scalacOptions := Seq("-feature", "-deprecation")
 run / javaOptions ++= Seq("-Xmx1024m", "-Xss1m")
 
-Test / fork := false
+fork := true
 
 testOptions += Tests.Argument(TestFrameworks.JUnit, "-v", "-s")
 
