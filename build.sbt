@@ -1,6 +1,8 @@
 name := "kojo-lib"
 
-version := "0.1"
+organization := "net.kogics"
+
+version := "0.1.0"
 
 scalaVersion := "2.13.6"
 
