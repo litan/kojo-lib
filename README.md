@@ -4,13 +4,22 @@ Kojo-Lib provides [Kojo](www.kojo.in) (the Scala based learning environment) as 
 - [Scala 3](https://github.com/litan/kojo-lib-scala3samples) or Scala 2.13.x, and any Scala IDE (Intellij IDEA, Visual Studio Code + Metals, etc).
 - Any JVM language (that is able to consume Java jar files).
 
-## Quick Start
+## Quick Start (for Scala / sbt)
+
+Add the following dependency in your build.sbt file:
+
+```
+val kojoLibVersion = "0.1.0"
+libraryDependencies += "net.kogics" % "kojo-lib" % kojoLibVersion from s"https://github.com/litan/kojo-lib/releases/download/v$kojoLibVersion/kojo-lib-assembly-$kojoLibVersion.jar"
+```
+
+## Doing a manual build (for any JVM language)
 - Clone this repo.
 - Go into the repo dir in a terminal.
 - run `./sbt.sh buildDist`.
 
 This will give you two folders of interest:
-- `dist` - which contains jars that you can use (on the classpath) with any JVM language.
+- `dist` - which contains jars that you can use (on the classpath) with any JVM language. *Note* - you can also use the latest kojo-lib-assembly-x.y.z.jar release jar in place of these jars.
 - `dist-scala` - which contains a couple of Scala jars that you need to include in your classpath for any language other than Scala.
 
 ### Minimal sample client programs
