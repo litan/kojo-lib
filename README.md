@@ -4,6 +4,21 @@ Kojo-Lib provides [Kojo](www.kojo.in) (the Scala based learning environment) as 
 - [Scala 3](https://github.com/litan/kojo-lib-scala3samples) or Scala 2.13.x, and any Scala IDE (Intellij IDEA, Visual Studio Code + Metals, etc).
 - Any JVM language (that is able to consume Java jar files).
 
+## Quick Start (for [scala-cli](https://scala-cli.virtuslab.org/install))
+
+Download the latest assembly jar and start the repl using scala-cli:
+```
+$ wget https://github.com/litan/kojo-lib/releases/download/v0.1.1/kojo-lib-assembly-0.1.1.jar
+$ scala-cli repl . --jar kojo-lib-assembly-0.1.1.jar
+Welcome to Scala 3.1.2 (17.0.2, Java OpenJDK 64-Bit Server VM).
+Type in expressions for evaluation. Or try :help.
+                                                                                                                               
+scala> import net.kogics.kojo.English.*, CanvasAPI.*, TurtleAPI.*
+                                                                                                                               
+scala> forward()
+
+```
+
 ## Quick Start (for Scala / sbt)
 
 Add the following dependency in your build.sbt file:
@@ -16,10 +31,11 @@ libraryDependencies += "net.kogics" % "kojo-lib" % kojoLibVersion from s"https:/
 ## Doing a manual build (for any JVM language)
 - Clone this repo.
 - Go into the repo dir in a terminal.
-- run `./sbt.sh buildDist`.
+- run `./sbt.sh buildDist` to get the `dist` and `dist-scala` dirs (explained below).
+- run `./sbt.sh assembly` to get a fat kojo-lib-assembly-x.y.z.jar in target/scala-2.13
 
 This will give you two folders of interest:
-- `dist` - which contains jars that you can use (on the classpath) with any JVM language. *Note* - you can also use the latest kojo-lib-assembly-x.y.z.jar release jar in place of these jars.
+- `dist` - which contains jars that you can use (on the classpath) with any JVM language. *Note* - you can also use the latest kojo-lib-assembly-x.y.z.jar release jar in place of these jars. 
 - `dist-scala` - which contains a couple of Scala jars that you need to include in your classpath for any language other than Scala.
 
 ### Minimal sample client programs
