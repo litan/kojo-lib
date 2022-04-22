@@ -11,7 +11,8 @@ Kojo-Lib provides [Kojo](www.kojo.in) (the Scala based learning environment) as 
   //> using scala "3"
   //> using lib "net.kogics:kojo-lib:0.1.1,url=https://github.com/litan/kojo-lib/releases/download/v0.1.1/kojo-lib-assembly-0.1.1.jar"
 
-  import net.kogics.kojo.English.*, CanvasAPI.*, TurtleAPI.*
+  //this export makes the API:s available on top level in repl and other .scala-files
+  export net.kogics.kojo.English.*, CanvasAPI.*, TurtleAPI.* 
 
   @main def run = 
     forward(200)
@@ -22,8 +23,6 @@ Kojo-Lib provides [Kojo](www.kojo.in) (the Scala based learning environment) as 
 
   - Start the repl and play with kojo with `scala-cli repl .`
   ```
-  scala> import net.kogics.kojo.English.*, CanvasAPI.*, TurtleAPI.*
-
   scala> forward()
   ```
 
@@ -47,6 +46,16 @@ You can use other languages by importing one of the available language-specific 
 ```
 import net.kogics.kojo.Swedish.*, padda.*, CanvasAPI.*, TurtleAPI.*
 ```
+* Download a simple Scala 3 file for the Swedish turtle that exports all on top level and start the repl:
+```
+$ wget https://github.com/lunduniversity/introprog/releases/download/kojo-lib-0.1.1/kojo.scala
+
+$ scala-cli repl .
+Welcome to Scala 3.1.2 (17.0.2, Java OpenJDK 64-Bit Server VM).
+Type in expressions for evaluation. Or try :help.
+
+scala> fram
+``` 
 
 
 ## Quick Start (for Scala / sbt)
