@@ -28,19 +28,19 @@ Kojo-Lib provides [Kojo](www.kojo.in) (the Scala based learning environment) as 
   ```
 
 * Or download the latest assembly jar manually and start the repl using scala-cli:
-```
-$ wget https://github.com/litan/kojo-lib/releases/download/v0.1.1/kojo-lib-assembly-0.1.1.jar
+  ```
+  $ wget https://github.com/litan/kojo-lib/releases/download/v0.1.1/kojo-lib-assembly-0.1.1.jar
 
-$ scala-cli repl . --jar kojo-lib-assembly-0.1.1.jar
+  $ scala-cli repl . --jar kojo-lib-assembly-0.1.1.jar
 
-Welcome to Scala 3.1.2 (17.0.2, Java OpenJDK 64-Bit Server VM).
-Type in expressions for evaluation. Or try :help.
+  Welcome to Scala 3.1.2 (17.0.2, Java OpenJDK 64-Bit Server VM).
+  Type in expressions for evaluation. Or try :help.
 
-scala> import net.kogics.kojo.English.*, CanvasAPI.*, TurtleAPI.*
+  scala> import net.kogics.kojo.English.*, CanvasAPI.*, TurtleAPI.*
 
-scala> forward()
+  scala> forward()
 
-```
+  ```
 
 You can use other languages by importing one of the available language-specific APIs:
 *  Get both the Swedish and English API in scope:
