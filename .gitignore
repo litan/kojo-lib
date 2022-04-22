@@ -20,3 +20,5 @@ dist-scala/
 Kojo.zip
 log
 **/.DS_Store
+.metals
+.vscode
