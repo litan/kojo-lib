@@ -6,18 +6,48 @@ Kojo-Lib provides [Kojo](www.kojo.in) (the Scala based learning environment) as 
 
 ## Quick Start (for [scala-cli](https://scala-cli.virtuslab.org/install))
 
-Download the latest assembly jar and start the repl using scala-cli:
+* Let scala-cli download kojo-lib for you by using these magic comments starting with `//>` like so in a `.scala`-file:
+  ```
+  //> using scala "3"
+  //> using lib "net.kogics:kojo-lib:0.1.1,url=https://github.com/litan/kojo-lib/releases/download/v0.1.1/kojo-lib-assembly-0.1.1.jar"
+
+  import net.kogics.kojo.English.*, CanvasAPI.*, TurtleAPI.*
+
+  @main def run = 
+    forward(200)
+    // your turtle graphics code here
+  ```
+
+  - Run your program with `scala-cli run .`
+
+  - Start the repl and play with kojo with `scala-cli repl .`
+  ```
+  scala> import net.kogics.kojo.English.*, CanvasAPI.*, TurtleAPI.*
+
+  scala> forward()
+  ```
+
+* Or download the latest assembly jar manually and start the repl using scala-cli:
 ```
 $ wget https://github.com/litan/kojo-lib/releases/download/v0.1.1/kojo-lib-assembly-0.1.1.jar
+
 $ scala-cli repl . --jar kojo-lib-assembly-0.1.1.jar
+
 Welcome to Scala 3.1.2 (17.0.2, Java OpenJDK 64-Bit Server VM).
 Type in expressions for evaluation. Or try :help.
-                                                                                                                               
+
 scala> import net.kogics.kojo.English.*, CanvasAPI.*, TurtleAPI.*
-                                                                                                                               
+
 scala> forward()
 
 ```
+
+You can use other languages by importing one of the available language-specific APIs:
+*  Get both the Swedish and English API in scope:
+```
+import net.kogics.kojo.Swedish.*, padda.*, CanvasAPI.*, TurtleAPI.*
+```
+
 
 ## Quick Start (for Scala / sbt)
 
