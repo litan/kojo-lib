@@ -8,11 +8,10 @@ import net.kogics.kojo.core.Turtle
 import java.awt.Color
 
 /**  The Swedish and English api can be accessed via this one-line import:
-  *  import net.kogics.kojo.Swedish.*, CanvasAPI.*, TurtleAPI.*
+  *  import net.kogics.kojo.Swedish.*, padda.*, CanvasAPI.*, TurtleAPI.*
   */
 object Swedish {
-  val frame = KojoFrame.create(width = 800, height = 600, showLoading = false)
-  val builtins = frame.builtins
+  val builtins = English.frame.builtins
   val CanvasAPI = builtins.CanvasAPI
   val TurtleAPI = builtins.TurtleAPI
 
