@@ -11,7 +11,7 @@
   scala-cli repl .
   ```
 
-* You should eventually now see something similar to:
+* You should eventually see something similar to:
   ```
   Welcome to Scala 3.1.2 (17.0.2, Java OpenJDK 64-Bit Server VM).
   Type in expressions for evaluation. Or try :help.
