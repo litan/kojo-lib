@@ -4,58 +4,27 @@ Kojo-Lib provides [Kojo](www.kojo.in) (the Scala based learning environment) as 
 - [Scala 3](https://github.com/litan/kojo-lib-scala3samples) or Scala 2.13.x, and any Scala IDE (Intellij IDEA, Visual Studio Code + Metals, etc).
 - Any JVM language (that is able to consume Java jar files).
 
-## Quick Start (for [scala-cli](https://scala-cli.virtuslab.org/install))
+## Quick Start (for [scala-cli](https://scala-cli.virtuslab.org/))
 
-* Let scala-cli download kojo-lib for you by using these magic comments starting with `//>` like so in a `.scala`-file:
-  ```
-  //> using scala "3"
-  //> using lib "net.kogics:kojo-lib:0.1.1,url=https://github.com/litan/kojo-lib/releases/download/v0.1.1/kojo-lib-assembly-0.1.1.jar"
+* Install `scala-cli` from here: https://scala-cli.virtuslab.org/install
 
-  //this export makes the API:s available on top level in repl and other .scala-files
-  export net.kogics.kojo.English.*, CanvasAPI.*, TurtleAPI.* 
+* Download this file: https://github.com/litan/kojo-lib/releases/download/v0.1.1/kojo-english.scala
 
-  @main def run = 
-    forward(200)
-    // your turtle graphics code here
-  ```
-
-  - Run your program with `scala-cli run .`
-
-  - Start the repl and play with kojo with `scala-cli repl .`
-  ```
-  scala> forward()
-  ```
-
-* Or download the latest assembly jar manually and start the repl using scala-cli:
-  ```
-  $ wget https://github.com/litan/kojo-lib/releases/download/v0.1.1/kojo-lib-assembly-0.1.1.jar
-
-  $ scala-cli repl . --jar kojo-lib-assembly-0.1.1.jar
-
-  Welcome to Scala 3.1.2 (17.0.2, Java OpenJDK 64-Bit Server VM).
-  Type in expressions for evaluation. Or try :help.
-
-  scala> import net.kogics.kojo.English.*, CanvasAPI.*, TurtleAPI.*
-
-  scala> forward()
-
-  ```
-
-You can use other languages by importing one of the available language-specific APIs:
-*  Get both the Swedish and English API in scope:
+* Start the Scala REPL in the same dir as the above file with this command:
 ```
-import net.kogics.kojo.Swedish.*, padda.*, CanvasAPI.*, TurtleAPI.*
-```
-* Download a simple Scala 3 file for the Swedish turtle that exports all on top level and start the repl:
-```
-$ wget https://github.com/lunduniversity/introprog/releases/download/kojo-lib-0.1.1/kojo.scala
-
 $ scala-cli repl .
+```
+* Type `forward()` by the `scala>` prompt:
+```
 Welcome to Scala 3.1.2 (17.0.2, Java OpenJDK 64-Bit Server VM).
 Type in expressions for evaluation. Or try :help.
 
-scala> fram
+scala> forward()
 ``` 
+
+* You should now see the Kojo turtle draw a red line i a new window.
+
+* For further information see [here](https://github.com/litan/kojo-lib/tree/main/getting-started), including how to get Kojo started with a specific local language.
 
 
 ## Quick Start (for Scala / sbt)
@@ -63,7 +32,7 @@ scala> fram
 Add the following dependency in your build.sbt file:
 
 ```
-val kojoLibVersion = "0.1.0"
+val kojoLibVersion = "0.1.1"
 libraryDependencies += "net.kogics" % "kojo-lib" % kojoLibVersion from s"https://github.com/litan/kojo-lib/releases/download/v$kojoLibVersion/kojo-lib-assembly-$kojoLibVersion.jar"
 ```
 
