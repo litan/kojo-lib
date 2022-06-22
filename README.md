@@ -12,7 +12,7 @@ Kojo-Lib provides [Kojo](www.kojo.in) (the Scala based learning environment) as 
 
 * Start the Scala REPL in the same dir as the above file with this command:
 ```
-$ scala-cli repl .
+scala-cli repl .
 ```
 
 * Type `forward()` by the `scala>` prompt:
@@ -35,7 +35,8 @@ scala> forward()
 * Add the following dependency in your `build.sbt` file:
 ```
 val kojoLibVersion = "0.1.1"
-libraryDependencies += "net.kogics" % "kojo-lib" % kojoLibVersion from s"https://github.com/litan/kojo-lib/releases/download/v$kojoLibVersion/kojo-lib-assembly-$kojoLibVersion.jar"
+libraryDependencies += "net.kogics" % "kojo-lib" % kojoLibVersion from 
+  s"https://github.com/litan/kojo-lib/releases/download/v$kojoLibVersion/kojo-lib-assembly-$kojoLibVersion.jar"
 ```
 
 * Start `sbt` and type `console` inside sbt to start the Scala REPL
