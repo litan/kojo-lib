@@ -1,6 +1,6 @@
 # Kojo Lib
 
-Kojo-Lib provides [Kojo](www.kojo.in) (the Scala based learning environment) as a library that you can use with:
+Kojo-Lib provides [Kojo](https://www.kojo.in) (the Scala based learning environment) as a library that you can use with:
 - [Scala 3](https://github.com/litan/kojo-lib-scala3samples) or Scala 2.13.x, and any Scala IDE (Intellij IDEA, Visual Studio Code + Metals, etc).
 - Any JVM language (that is able to consume Java jar files).
 
