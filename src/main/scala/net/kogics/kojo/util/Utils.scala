@@ -54,7 +54,7 @@ object Utils {
   lazy val Log = Logger.getLogger("Utils")
   lazy val imageCache = new HashMap[String, BufferedImage]
   lazy val iconCache = new HashMap[String, ImageIcon]
-  val GuiTimeout = 10000
+  val GuiTimeout = 15000
 
   def absolutePath(fname0: String): String = {
     def expandHomeDir(fname: String): String =
@@ -202,9 +202,16 @@ object Utils {
   def inSwingThread = EventQueue.isDispatchThread
 
   def runAsync(fn: => Unit): Unit = {
+    import scala.util.control.NonFatal
     new Thread(new Runnable {
       def run: Unit = {
-        fn
+        try {
+          fn
+        }
+        catch {
+          case NonFatal(e) =>
+            Log.log(Level.WARNING, "Problem on async runner thread", e)
+        }
       }
     }).start
   }
@@ -273,6 +280,20 @@ object Utils {
     })
   }
 
+  // a version of runInSwingThread - which can be useful if batching is not needed
+  def runInSwingThreadNonBatched(fn: => Unit): Unit = {
+    if (EventQueue.isDispatchThread) {
+      fn
+    }
+    else {
+      javax.swing.SwingUtilities.invokeLater(new Runnable {
+        override def run: Unit = {
+          fn
+        }
+      })
+    }
+  }
+
   val batchLock = new ReentrantLock
   val notFull = batchLock.newCondition
   val Max_Q_Size = 9000
@@ -283,7 +304,7 @@ object Utils {
     keepProcessingQ = false
   }
 
-  // this is the core of Kojo UI performance - so the code is a little low-level
+  // this is the core of Kojo UI/drawing performance - so the code is a little low-level
   def runInSwingThread(fn: => Unit): Unit = {
     if (EventQueue.isDispatchThread) {
       fn
@@ -531,6 +552,11 @@ object Utils {
     messages.getString(key).format(args: _*).concat(stringSuffix(key))
   }
 
+  // Loads the actual string in the bundle without the debug key suffix
+  def loadBundleString(key: String) = {
+    messages.getString(key)
+  }
+
   def filesInDir(dir: String, ext: String): List[String] = {
     val osDir = new File(dir)
     if (osDir.exists && osDir.isDirectory) {
@@ -736,13 +762,18 @@ object Utils {
     if (kc == 0) e.getKeyChar.toUpper.toInt else kc
   }
 
+  lazy val includePragma = loadBundleString("S_IncludePragma")
+  lazy val includeRE = ("""//\s*#""" ++ includePragma ++ """.*""").r
+  lazy val filenameRE = ("""//\s*#""" ++ includePragma).r
+  lazy val basecodeRE = ("""//(\s)*#""" ++ includePragma ++ """(.*)""").r
+
   def preProcessInclude(code: String): (String, Int, Int) = {
     val included = new mutable.HashSet[String]()
 
     def _preProcessInclude(code: String): (String, Int, Int) = {
       def countLines(s: String) = s.count(_ == '\n')
-      val includes = """//\s*#include.*""".r.findAllIn(code)
-      def getFileName(s: String) = """//\s*#include""".r.replaceFirstIn(s, "").trim
+      val includes = includeRE.findAllIn(code)
+      def getFileName(s: String) = filenameRE.replaceFirstIn(s, "").trim
       def addKojoExtension(fileName: String) = {
         val justFileName = new File(fileName).getName
         if (!justFileName.contains(".")) fileName + ".kojo" else fileName
@@ -781,7 +812,7 @@ object Utils {
       }
 
       val addedCode = (for (i <- includes) yield load(getFileName(i))).mkString
-      val baseCode = """//(\s)*#include(.*)""".r.replaceAllIn(code, "//$1#Include$2")
+      val baseCode = basecodeRE.replaceAllIn(code, "//$1#" ++ includePragma.capitalize ++ "$2")
       (addedCode + baseCode, countLines(addedCode), addedCode.length)
     }
 
@@ -887,7 +918,7 @@ object Utils {
   def increaseSysTimerResolutionIfNeeded(): Unit = {
     if (isWin) {
       if (timerThreadCount.getAndIncrement == 0) {
-        runAsyncMonitored {
+        runAsync {
           try {
             // The irregularly long sleep makes the JVM set the OS timer resolution to 1 ms
             Thread.sleep(Int.MaxValue)

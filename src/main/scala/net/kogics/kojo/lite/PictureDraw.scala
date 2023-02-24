@@ -61,17 +61,17 @@ class PictureDraw(val b: Builtins) {
 
   def background(c: Color): Unit = {
     setBackground(c)
-    CanvasAPI.erasePictures()
+    TSCanvas.erasePictures()
   }
 
   def background(n: Int): Unit = {
     setBackground(cm.rgb(n, n, n))
-    CanvasAPI.erasePictures()
+    TSCanvas.erasePictures()
   }
 
   def background(r: Int, g: Int, b: Int): Unit = {
     setBackground(cm.rgb(r, g, b))
-    CanvasAPI.erasePictures()
+    TSCanvas.erasePictures()
   }
 
   def noStroke(): Unit = {

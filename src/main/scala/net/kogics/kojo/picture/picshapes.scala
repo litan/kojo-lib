@@ -32,6 +32,7 @@ import edu.umd.cs.piccolo.nodes.PImage
 import edu.umd.cs.piccolo.nodes.PPath
 import edu.umd.cs.piccolo.util.PPaintContext
 import edu.umd.cs.piccolo.PNode
+import edu.umd.cs.piccolox.nodes.PClip
 import edu.umd.cs.piccolox.pswing.PSwing
 import net.kogics.kojo.core.Picture
 import net.kogics.kojo.core.SCanvas
@@ -598,4 +599,35 @@ class TextPic(text: String, size: Int, color: Color)(implicit val canvas: SCanva
 
   def copy: net.kogics.kojo.core.Picture = new TextPic(text, size, color)
   override def toString() = s"TextPic (Id: ${System.identityHashCode(this)})"
+}
+
+class ClipPic(pic: Picture, clipShape: Shape)(implicit val canvas: SCanvas)
+    extends Picture
+    with CorePicOps
+    with CorePicOps2
+    with TNodeCacher
+    with RedrawStopper
+    with PicShapeOps {
+  def initGeom(): com.vividsolutions.jts.geom.Geometry = {
+    throw new RuntimeException("Clip pic does not yet support geometry")
+  }
+
+  def makeTnode: edu.umd.cs.piccolo.PNode = Utils.runInSwingThreadAndPause {
+    val node = new PClip()
+    node.append(clipShape, false)
+    _setPenColor(node, Color.black)
+    _setPenThickness(node, 0)
+    node.setPaint(null)
+    node.addChild(pic.tnode)
+    node.setVisible(false)
+    picLayer.addChild(node)
+    node
+  }
+
+  override def realDraw(): Unit = {
+    pic.draw()
+    super.realDraw()
+  }
+
+  def copy: net.kogics.kojo.core.Picture = new ClipPic(pic.copy, clipShape)
 }

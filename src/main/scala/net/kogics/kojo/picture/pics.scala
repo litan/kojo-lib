@@ -18,19 +18,23 @@ package picture
 
 import java.awt.geom.AffineTransform
 import java.awt.image.BufferedImage
+import java.awt.image.BufferedImageOp
 import java.awt.BasicStroke
 import java.awt.Color
 import java.awt.Paint
+import java.awt.Shape
 import java.util.concurrent.Future
 
 import scala.collection.mutable.ArrayBuffer
 
+import com.jhlabs.image.AbstractBufferedImageOp
 import com.vividsolutions.jts.geom.util.AffineTransformation
 import com.vividsolutions.jts.geom.Coordinate
 import com.vividsolutions.jts.geom.Geometry
 import com.vividsolutions.jts.geom.TopologyException
 import edu.umd.cs.piccolo.activities.PActivity
 import edu.umd.cs.piccolo.nodes.PPath
+import edu.umd.cs.piccolo.nodes.PText
 import edu.umd.cs.piccolo.PNode
 import net.kogics.kojo.core.Cm
 import net.kogics.kojo.core.Inch
@@ -38,8 +42,8 @@ import net.kogics.kojo.core.Picture
 import net.kogics.kojo.core.Pixel
 import net.kogics.kojo.core.SCanvas
 import net.kogics.kojo.kgeom.PolyLine
+import net.kogics.kojo.kmath.{ Kmath => Math }
 import net.kogics.kojo.picture.PicCache.freshPics
-import net.kogics.kojo.util.Math
 import net.kogics.kojo.util.Utils
 
 trait GeomPolygon { self: Picture =>
@@ -63,6 +67,7 @@ trait CorePicOps extends GeomPolygon with UnsupportedOps { self: Picture with Re
   protected var axes: PNode = _
   protected var _picGeom: Geometry = _
   protected var _pgTransform: AffineTransformation = _
+  protected var _zIndex = -1
 
   def pgTransform = {
     if (_pgTransform == null) {
@@ -115,12 +120,31 @@ trait CorePicOps extends GeomPolygon with UnsupportedOps { self: Picture with Re
     transformBy(AffineTransform.getRotateInstance(angle.toRadians))
   }
 
+  private def safeScaleFactor(factor: Double) = if (factor == 0) Double.MinPositiveValue else factor
+
   def scale(factor: Double): Unit = {
-    transformBy(AffineTransform.getScaleInstance(factor, factor))
+    val safeFactor = safeScaleFactor(factor)
+    transformBy(AffineTransform.getScaleInstance(safeFactor, safeFactor))
   }
 
-  def scale(x: Double, y: Double): Unit = {
-    transformBy(AffineTransform.getScaleInstance(x, y))
+  def scaleAboutPoint(factor: Double, x: Double, y: Double): Unit = {
+    translate(x, y)
+    scale(factor)
+    translate(-x, -y)
+  }
+
+  def scaleAboutPoint(factorX: Double, factorY: Double, x: Double, y: Double): Unit = {
+    translate(x, y)
+    scale(factorX, factorY)
+    translate(-x, -y)
+  }
+
+  def scale(xFactor: Double, yFactor: Double): Unit = {
+    transformBy(AffineTransform.getScaleInstance(safeScaleFactor(xFactor), safeScaleFactor(yFactor)))
+  }
+
+  def shear(shearX: Double, shearY: Double): Unit = {
+    transformBy(AffineTransform.getShearInstance(shearX, shearY))
   }
 
   def translate(x: Double, y: Double): Unit = {
@@ -144,6 +168,29 @@ trait CorePicOps extends GeomPolygon with UnsupportedOps { self: Picture with Re
   def setPosition(x: Double, y: Double) = Utils.runInSwingThread {
     tnode.setOffset(x, y)
     _pgTransform = null
+  }
+
+  def setZIndex(zIndex: Int): Unit = Utils.runInSwingThread {
+    _zIndex = zIndex
+    val parent = tnode.getParent
+    parent.removeChild(tnode)
+    val nc = parent.getChildrenCount
+    var idx = 0
+    var found = false
+    while (idx < nc && !found) {
+      val pic = parent.getChild(idx).getAttribute("pic")
+      val siblingZi = if (pic == null) -1 else pic.asInstanceOf[CorePicOps]._zIndex
+      if (siblingZi > zIndex) {
+        found = true
+        parent.addChild(idx, tnode)
+      }
+      else {
+        idx += 1
+      }
+    }
+    if (!found) {
+      parent.addChild(idx, tnode)
+    }
   }
 
   def heading = Utils.runInSwingThreadAndPause {
@@ -305,6 +352,7 @@ trait CorePicOps extends GeomPolygon with UnsupportedOps { self: Picture with Re
   def update(newData: Any): Unit = notSupported("update", "for immutable picture")
 }
 
+// Ops that transforms cannot delegate to their underlying tpic
 trait CorePicOps2 extends GeomPolygon { self: Picture =>
   def picLayer = canvas.pictures
   var reactions = Vector.empty[Future[PActivity]]
@@ -377,6 +425,43 @@ trait CorePicOps2 extends GeomPolygon { self: Picture =>
   def beside(other: Picture): Picture = HPics2(this, other)
   def above(other: Picture): Picture = VPics2(other, this)
   def on(other: Picture): Picture = GPics2(other, this)
+
+  // Transforms that are applied before drawing
+  def thatsRotated(angle: Double): Picture = PreDrawTransform { pic => pic.rotate(angle) }(this)
+  def thatsRotatedAround(angle: Double, x: Double, y: Double): Picture =
+    PreDrawTransform { pic => pic.rotateAboutPoint(angle, x, y) }(this)
+  def thatsTranslated(x: Double, y: Double): Picture = PreDrawTransform { pic => pic.translate(x, y) }(this)
+  def thatsScaled(factor: Double): Picture = PreDrawTransform { pic => pic.scale(factor) }(this)
+  def thatsScaled(factorX: Double, factorY: Double): Picture =
+    PreDrawTransform { pic => pic.scale(factorX, factorY) }(this)
+  def thatsScaledAround(factor: Double, x: Double, y: Double): Picture =
+    PreDrawTransform { pic => pic.scaleAboutPoint(factor, x, y) }(this)
+  def thatsScaledAround(factorX: Double, factorY: Double, x: Double, y: Double): Picture =
+    PreDrawTransform { pic => pic.scaleAboutPoint(factorX, factorY, x, y) }(this)
+  def thatsSheared(shearX: Double, shearY: Double): Picture =
+    PreDrawTransform { pic => pic.shear(shearX, shearY) }(this)
+  def thatsFilledWith(color: Paint): Picture = PostDrawTransform { pic => pic.setFillColor(color) }(this)
+  def thatsStrokeColored(color: Paint): Picture = PostDrawTransform { pic => pic.setPenColor(color) }(this)
+  def thatsStrokeSized(t: Double): Picture = PostDrawTransform { pic => pic.setPenThickness(t) }(this)
+
+  def withEffect(filter: BufferedImageOp): Picture = ApplyFilter(filter)(epic(this))
+  def withEffect(filterOp: ImageOp): Picture = {
+    val filter2 = new AbstractBufferedImageOp {
+      def filter(src: BufferedImage, dest: BufferedImage) = filterOp.filter(src)
+    }
+    withEffect(filter2)
+  }
+  def withFlippedX: Picture = FlipY(this)
+  def withFlippedY: Picture = FlipX(this)
+  def withFading(distance: Int): Picture = Fade(distance)(epic(this))
+  def withBlurring(radius: Int): Picture = Blur(radius)(epic(this))
+  def withAxes: Picture = PostDrawTransform { pic => pic.axesOn() }(this)
+  def withLocalBounds: Picture = PostDrawTransform { pic => picLocalBounds(pic) }(this)
+  def withOpacity(opacity: Double): Picture = PostDrawTransform { pic => pic.setOpacity(opacity) }(this)
+  def withPosition(x: Double, y: Double): Picture = PostDrawTransform { pic => pic.setPosition(x, y) }(this)
+  def withZIndex(zIndex: Int): Picture = PostDrawTransform { pic => pic.setZIndex(zIndex) }(this)
+  def withClipping(clipShape: Shape): Picture = new ClipPic(this, clipShape)(canvas)
+  def withPenCapJoin(capJoin: (Int, Int)): Picture = PostDrawTransform { pic => pic.setPenCapJoin(capJoin) }(this)
 }
 
 trait RedrawStopper extends Picture {
@@ -400,6 +485,7 @@ trait TNodeCacher {
   def tnode = {
     if (_tnode == null) {
       _tnode = makeTnode
+      _tnode.addAttribute("pic", this)
     }
     _tnode
   }
@@ -495,6 +581,13 @@ class Pic(painter: Painter)(implicit val canvas: SCanvas)
     pp.foreach { pl =>
       pl.setStrokePaint(color)
       pl.repaint()
+    }
+    val iter = t.tlayer.getChildrenIterator
+    while (iter.hasNext) {
+      iter.next match {
+        case text: PText => text.setTextPaint(color)
+        case _           =>
+      }
     }
   }
 
@@ -680,18 +773,26 @@ abstract class BasePicList(val pics: List[Picture])
 }
 
 object HPics {
-  def apply(pics: Picture*): HPics = new HPics(freshPics(pics.toList))
-  def apply(pics: collection.Seq[Picture]): HPics = new HPics(freshPics(pics.toList))
+  def apply(pics: Picture*): HPics = new HPics(freshPics(pics).toList)
+  def apply(pics: collection.Seq[Picture]): HPics = new HPics(freshPics(pics).toList)
 }
 
 class HPics(pics: List[Picture]) extends BasePicList(pics) {
   def realDraw(): Unit = {
-    var ox = 0.0
+    var prevPic: Option[Picture] = None
     pics.foreach { pic =>
-      pic.translate(ox, 0)
+      pic.invisible()
       pic.draw()
-      val nbounds = pic.bounds
-      ox = nbounds.getMinX + nbounds.getWidth + padding
+      prevPic match {
+        case Some(ppic) =>
+          val pbounds = ppic.bounds
+          val bounds = pic.bounds
+          val tx = pbounds.getMaxX - bounds.getMinX
+          pic.offset(tx, 0)
+        case None =>
+      }
+      pic.visible()
+      prevPic = Some(pic)
     }
   }
 
@@ -707,8 +808,8 @@ class HPics(pics: List[Picture]) extends BasePicList(pics) {
 }
 
 object HPics2 {
-  def apply(pics: Picture*): HPics2 = new HPics2(freshPics(pics.toList))
-  def apply(pics: collection.Seq[Picture]): HPics2 = new HPics2(freshPics(pics.toList))
+  def apply(pics: Picture*): HPics2 = new HPics2(freshPics(pics).toList)
+  def apply(pics: collection.Seq[Picture]): HPics2 = new HPics2(freshPics(pics).toList)
 }
 
 class HPics2(pics: List[Picture]) extends BasePicList(pics) {
@@ -720,12 +821,10 @@ class HPics2(pics: List[Picture]) extends BasePicList(pics) {
       prevPic match {
         case Some(ppic) =>
           val pbounds = ppic.bounds
-          val tx = pbounds.getMinX + pbounds.getWidth + padding
-          pic.translate(tx, 0)
           val bounds = pic.bounds
+          val tx = pbounds.getMaxX - bounds.getMinX
           val ty = pbounds.getMinY - bounds.getMinY + (pbounds.height - bounds.height) / 2
-          val tx2 = pbounds.getMaxX - bounds.getMinX
-          pic.offset(tx2, ty)
+          pic.offset(tx, ty)
         case None =>
       }
       pic.visible()
@@ -745,18 +844,26 @@ class HPics2(pics: List[Picture]) extends BasePicList(pics) {
 }
 
 object VPics {
-  def apply(pics: Picture*): VPics = new VPics(freshPics(pics.toList))
-  def apply(pics: collection.Seq[Picture]): VPics = new VPics(freshPics(pics.toList))
+  def apply(pics: Picture*): VPics = new VPics(freshPics(pics).toList)
+  def apply(pics: collection.Seq[Picture]): VPics = new VPics(freshPics(pics).toList)
 }
 
 class VPics(pics: List[Picture]) extends BasePicList(pics) {
   def realDraw(): Unit = {
-    var oy = 0.0
+    var prevPic: Option[Picture] = None
     pics.foreach { pic =>
-      pic.translate(0, oy)
+      pic.invisible()
       pic.draw()
-      val nbounds = pic.bounds
-      oy = nbounds.getMinY + nbounds.getHeight + padding
+      prevPic match {
+        case Some(ppic) =>
+          val pbounds = ppic.bounds
+          val bounds = pic.bounds
+          val ty = pbounds.getMaxY - bounds.getMinY
+          pic.offset(0, ty)
+        case None =>
+      }
+      pic.visible()
+      prevPic = Some(pic)
     }
   }
 
@@ -772,8 +879,8 @@ class VPics(pics: List[Picture]) extends BasePicList(pics) {
 }
 
 object VPics2 {
-  def apply(pics: Picture*): VPics2 = new VPics2(freshPics(pics.toList))
-  def apply(pics: collection.Seq[Picture]): VPics2 = new VPics2(freshPics(pics.toList))
+  def apply(pics: Picture*): VPics2 = new VPics2(freshPics(pics).toList)
+  def apply(pics: collection.Seq[Picture]): VPics2 = new VPics2(freshPics(pics).toList)
 }
 
 class VPics2(pics: List[Picture]) extends BasePicList(pics) {
@@ -785,12 +892,10 @@ class VPics2(pics: List[Picture]) extends BasePicList(pics) {
       prevPic match {
         case Some(ppic) =>
           val pbounds = ppic.bounds
-          val ty = pbounds.getMinY + pbounds.getHeight + padding
-          pic.translate(0, ty)
           val bounds = pic.bounds
           val tx = pbounds.getMinX - bounds.getMinX + (pbounds.width - bounds.width) / 2
-          val ty2 = pbounds.getMaxY - bounds.getMinY
-          pic.offset(tx, ty2)
+          val ty = pbounds.getMaxY - bounds.getMinY
+          pic.offset(tx, ty)
         case None =>
       }
       pic.visible()
@@ -810,8 +915,8 @@ class VPics2(pics: List[Picture]) extends BasePicList(pics) {
 }
 
 object GPics {
-  def apply(pics: Picture*): GPics = new GPics(freshPics(pics.toList))
-  def apply(pics: collection.Seq[Picture]): GPics = new GPics(freshPics(pics.toList))
+  def apply(pics: Picture*): GPics = new GPics(freshPics(pics).toList)
+  def apply(pics: collection.Seq[Picture]): GPics = new GPics(freshPics(pics).toList)
 }
 
 class GPics(pics: List[Picture]) extends BasePicList(pics) {
@@ -833,8 +938,8 @@ class GPics(pics: List[Picture]) extends BasePicList(pics) {
 }
 
 object GPics2 {
-  def apply(pics: Picture*): GPics2 = new GPics2(freshPics(pics.toList))
-  def apply(pics: collection.Seq[Picture]): GPics2 = new GPics2(freshPics(pics.toList))
+  def apply(pics: Picture*): GPics2 = new GPics2(freshPics(pics).toList)
+  def apply(pics: collection.Seq[Picture]): GPics2 = new GPics2(freshPics(pics).toList)
 }
 
 class GPics2(pics: List[Picture]) extends BasePicList(pics) {

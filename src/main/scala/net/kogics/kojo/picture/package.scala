@@ -18,6 +18,7 @@ import java.awt.event.KeyEvent
 import java.awt.geom.GeneralPath
 import java.awt.image.BufferedImageOp
 import java.awt.Color
+import java.awt.Font
 import java.awt.Graphics2D
 import java.awt.Image
 import java.awt.Paint
@@ -35,6 +36,7 @@ import net.kogics.kojo.core.Cm
 import net.kogics.kojo.core.Inch
 import net.kogics.kojo.core.Pixel
 import net.kogics.kojo.core.SCanvas
+import net.kogics.kojo.picture.PicCache.freshPic
 import net.kogics.kojo.util.Utils
 import net.kogics.kojo.util.Vector2D
 
@@ -44,6 +46,9 @@ package object picture {
   def rot(angle: Double) = Rotc(angle)
   def rotp(angle: Double, x: Double, y: Double) = Rotpc(angle, x, y)
   def scale(factor: Double) = Scalec(factor)
+  def scalep(factor: Double, x: Double, y: Double) = PreDrawTransformc { pic =>
+    pic.scaleAboutPoint(factor, x, y)
+  }
   def scale(x: Double, y: Double) = ScaleXYc(x, y)
   def opac(f: Double) = Opacc(f)
   def hue(f: Double) = Huec(f)
@@ -54,6 +59,21 @@ package object picture {
   val flipX = FlipXc
   val flipY = FlipYc
   val axesOn = AxesOnc
+
+  private[picture] def picLocalBounds(pic: Picture): Unit = Utils.runInSwingThread {
+    import edu.umd.cs.piccolo.nodes.PPath
+    val tnode = pic.tnode
+    val b = tnode.getUnionOfChildrenBounds(null)
+    b.add(tnode.getBoundsReference)
+    val bRect = PPath.createRectangle(b.x.toFloat, b.y.toFloat, b.width.toFloat, b.height.toFloat)
+    bRect.setPaint(null)
+    tnode.addChild(bRect)
+    tnode.repaint()
+  }
+
+  def bounds = PostDrawTransformc { pic =>
+    picLocalBounds(pic)
+  }
   def fill(color: Paint) = Fillc(color)
   def stroke(color: Paint) = Strokec(color)
   def strokeWidth(w: Double) = StrokeWidthc(w)
@@ -63,6 +83,15 @@ package object picture {
     PointLightc(x, y, direction, elevation, distance)
   def spotLight(x: Double, y: Double, direction: Double, elevation: Double, distance: Double) =
     SpotLightc(x, y, direction, elevation, distance)
+  def distantLight(direction: Double, elevation: Double): LightFilter = {
+    val lightFilter = new LightFilter()
+    lightFilter.getLights.clear()
+    val light = new lightFilter.DistantLight()
+    light.setAzimuth(direction.toFloat.toRadians)
+    light.setElevation(elevation.toFloat.toRadians)
+    lightFilter.addLight(light)
+    lightFilter
+  }
   def lights(lights: Light*) = Lightsc(lights: _*)
   def noise(amount: Int, density: Double) = Noisec(amount, density)
   def weave(xWidth: Double, xGap: Double, yWidth: Double, yGap: Double) = Weavec(xWidth, xGap, yWidth, yGap)
@@ -118,22 +147,21 @@ package object picture {
     write(s)
   }
 
-  def textu(s0: Any, fontSize: Int, color: Color)(implicit canvas: SCanvas) = new TextPic(s0.toString, fontSize, color)
+  def text(s0: Any, fontSize: Int, color: Color)(implicit canvas: SCanvas): TextPic =
+    new TextPic(s0.toString, fontSize, color)
+  def text(s0: Any, font: Font, color: Color)(implicit canvas: SCanvas): TextPic = {
+    val ret = text(s0, 15, color)
+    ret.setPenFont(font)
+    ret
+  }
 
   def rect(h: Double, w: Double)(implicit canvas: SCanvas) = Pic { t =>
     Utils.trect(h, w, t)
   }
 
-  def vline(l: Double)(implicit canvas: SCanvas) = Pic { t =>
-    import t._
-    forward(l)
-  }
+  def vline(length: Double)(implicit canvas: SCanvas) = line(0, length)
 
-  def hline(l: Double)(implicit canvas: SCanvas) = Pic { t =>
-    import t._
-    right()
-    forward(l)
-  }
+  def hline(length: Double)(implicit canvas: SCanvas) = line(length, 0)
 
   def circle(r: Double)(implicit canvas: SCanvas) = new CirclePic(r)
 
@@ -149,6 +177,22 @@ package object picture {
 
   def fromJava2d(w: Double, h: Double, fn: Graphics2D => Unit)(implicit canvas: SCanvas) =
     new Java2DPic(w, h, fn)
+
+  def fromJava2dDynamic(w: Double, h: Double, scaleOutFactor: Double, fn: Graphics2D => Unit, stopCheck: => Boolean)(
+      implicit canvas: SCanvas
+  ) =
+    new Java2DPic(w * scaleOutFactor, h * scaleOutFactor, fn) {
+      override def draw(): Unit = {
+        super.draw()
+        scale(1 / scaleOutFactor)
+        canvas.animate {
+          update()
+          if (stopCheck) {
+            canvas.stopAnimation()
+          }
+        }
+      }
+    }
 
   def image(file: String, envelope: Option[Picture])(implicit canvas: SCanvas) = new FileImagePic(file, envelope)
   def image(url: URL, envelope: Option[Picture])(implicit canvas: SCanvas) = new UrlImagePic(url, envelope)
@@ -430,5 +474,10 @@ package object picture {
     pullbackCollision()
     val cv = collisionVector
     vel.bounceOff(cv)
+  }
+
+  protected[picture] def epic(p: Picture) = p match {
+    case ep: EffectablePicture => ep
+    case _                     => new EffectableImagePic(freshPic(p))(p.canvas)
   }
 }

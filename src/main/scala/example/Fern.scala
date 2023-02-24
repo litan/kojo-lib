@@ -8,8 +8,8 @@ object Fern {
     val builtins = kojo.builtins
 
     import builtins._
-    import CanvasAPI._
-    import TurtleAPI._
+    import TSCanvas._
+    import Tw._
 
     // `Fern` sample from Kojo Showcase menu
 

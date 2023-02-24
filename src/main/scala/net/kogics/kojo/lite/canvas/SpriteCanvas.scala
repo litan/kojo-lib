@@ -192,7 +192,7 @@ class SpriteCanvas(val kojoCtx: core.KojoCtx) extends PSwingCanvas with SCanvas 
     def showPopup(e: PInputEvent): Unit = {
       if (e.isPopupTrigger) {
         val pos = e.getCanvasPosition
-        popup.show(SpriteCanvas.this, pos.getX.toInt, pos.getY.toInt);
+        popup.show(SpriteCanvas.this, pos.getX.toInt + 10, pos.getY.toInt + 10);
       }
     }
 
@@ -659,7 +659,7 @@ class SpriteCanvas(val kojoCtx: core.KojoCtx) extends PSwingCanvas with SCanvas 
       pictures.removeAllChildren()
       zoom(1, 0, 0)
       enablePanAndZoom()
-      Builtins.instance.resetPictureDraw()
+      Builtins.instance.onClear()
     }
     PicCache.clear()
     Utils.clearGuiBatchQ()
@@ -825,9 +825,16 @@ class SpriteCanvas(val kojoCtx: core.KojoCtx) extends PSwingCanvas with SCanvas 
     setCanvasBackground(paint)
   }
 
-  def timer(rate: Long)(fn: => Unit): Future[PActivity] = figure0.refresh(rate, rate)(fn)
-
-  def animate(fn: => Unit): Future[PActivity] = figure0.refresh(fn)
+  def timer(rate: Long)(fn: => Unit): Future[PActivity] = figure0.refresh(rate, 0)(fn)
+  def timerWithState[S](rate: Long, initState: S)(nextState: S => S): Future[PActivity] = {
+    var state = initState
+    timer(rate) {
+      state = nextState(state)
+    }
+  }
+  def animate(fn: => Unit): Future[PActivity] = timer(1000 / kojoCtx.fps)(fn)
+  def animateWithState[S](initState: S)(nextState: S => S): Future[PActivity] =
+    timerWithState(1000 / kojoCtx.fps, initState)(nextState)
 
   def animateActivity(a: PActivity) = getRoot.addActivity(a)
 
@@ -914,6 +921,16 @@ class SpriteCanvas(val kojoCtx: core.KojoCtx) extends PSwingCanvas with SCanvas 
 
     stageArea.draw()
     stage.draw()
+  }
+
+  protected override def sendInputEventToInputManager(event: InputEvent, typ: Int): Unit = {
+    try {
+      super.sendInputEventToInputManager(event, typ)
+    }
+    catch {
+      case _: RuntimeException =>
+      // Ignore events that Piccolo is unable to handle
+    }
   }
 
   class Popup() extends JPopupMenu {

@@ -18,26 +18,24 @@ package net.kogics.kojo
 package staging
 
 import java.awt.BasicStroke
-import java.awt.Color
 import java.awt.Paint
 import java.util.concurrent.Future
 
-import core.InputAware
-import core.Point
+import scala.language.implicitConversions
+import scala.language.postfixOps
+
 import edu.umd.cs.piccolo.activities.PActivity
-import edu.umd.cs.piccolo.event._
 import edu.umd.cs.piccolo.nodes.PPath
 import edu.umd.cs.piccolo.util.PBounds
 import edu.umd.cs.piccolo.PNode
-import language.implicitConversions
-import language.postfixOps
-import lite.canvas.SpriteCanvas
 import net.kogics.kojo.core.InputAware
+import net.kogics.kojo.core.Point
 import net.kogics.kojo.core.Turtle
 import net.kogics.kojo.core.UnitLen
 import net.kogics.kojo.figure.Figure
-import util.Math
-import util.Utils
+import net.kogics.kojo.kmath.{ Kmath => Math }
+import net.kogics.kojo.lite.canvas.SpriteCanvas
+import net.kogics.kojo.util.Utils
 
 object Impl {
   @volatile var canvas: SpriteCanvas = _

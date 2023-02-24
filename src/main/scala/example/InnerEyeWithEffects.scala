@@ -8,8 +8,8 @@ object InnerEyeWithEffects {
     val builtins = kojo.builtins
 
     import builtins._
-    import CanvasAPI._
-    import TurtleAPI._
+    import TSCanvas._
+    import Tw._
 
     // `Inner Eye (with effects)` sample from Kojo Showcase menu
 

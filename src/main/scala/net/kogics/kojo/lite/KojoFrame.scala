@@ -108,8 +108,8 @@ class KojoFrame private (width: Int, height: Int, showLoading: Boolean) {
       Utils.runInSwingThreadAndWait {
         val b = builtins
         import b._
-        import CanvasAPI._
-        import TurtleAPI._
+        import TSCanvas._
+        import Tw._
 
         cleari()
         val fig = Picture.image("/images/splash.png")

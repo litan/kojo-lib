@@ -18,6 +18,8 @@ package figure
 
 import java.awt.{ List => _, Point => _, _ }
 import java.util.concurrent.Future
+import java.util.logging.Level
+import java.util.logging.Logger
 
 import core._
 import edu.umd.cs.piccolo._
@@ -40,6 +42,7 @@ class Figure private (canvas: SCanvas, initX: Double, initY: Double) {
   private val bgLayer = new PLayer
   private val fgLayer = new PLayer
   private var currLayer = bgLayer
+  val Log = Logger.getLogger("FigureAnimator")
 
   // if fgLayer is bigger than bgLayer, (re)painting does not happen very cleanly
   // needs a better fix than the one below
@@ -183,7 +186,7 @@ class Figure private (canvas: SCanvas, initX: Double, initY: Double) {
     @volatile var figAnimation: PActivity = null
     val promise = new FutureResult[PActivity]
 
-    Utils.runLaterInSwingThread {
+    Utils.runInSwingThreadNonBatched {
       val _ = figAnimation // force a volatile read to trigger a StoreLoad memory barrier
       figAnimation = new PActivity(-1, rate, System.currentTimeMillis + delay) {
         override def activityStep(elapsedTime: Long): Unit = {
@@ -197,9 +200,10 @@ class Figure private (canvas: SCanvas, initX: Double, initY: Double) {
           }
           catch {
             case t: Throwable =>
-              println("Problem: " + t.toString())
               terminate(PActivity.TERMINATE_AND_FINISH)
               figAnimations = figAnimations.filter { _ != this }
+              println("Problem: " + t.toString())
+              Log.log(Level.WARNING, "GUI Thread Problem", t)
           }
           finally {
             //            repaint()

@@ -82,11 +82,12 @@ class LoTurtle(val t: core.Turtle) extends Dynamic {
   def applyDynamic(name: String)(args: Any*): LoTurtle = {
     try {
       args.size match {
-        case 0 => cmdsu(Symbol(name)).apply(())
-        case 1 => cmdsd(Symbol(name))(args(0))
-        case 2 => cmdsdd(Symbol(name))(args(0), args(1))
-        case 3 => cmdsddd(Symbol(name))(args(0), args(1), args(2))
-        case _ => this
+        case 0                             => cmdsu(Symbol(name)).apply(())
+        case 1 if args(0).toString == "()" => cmdsu(Symbol(name)).apply(())
+        case 1                             => cmdsd(Symbol(name))(args(0))
+        case 2                             => cmdsdd(Symbol(name))(args(0), args(1))
+        case 3                             => cmdsddd(Symbol(name))(args(0), args(1), args(2))
+        case _                             => this
       }
     }
     catch {

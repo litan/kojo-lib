@@ -18,6 +18,7 @@ package picture
 
 import java.awt.geom.AffineTransform
 import java.awt.Paint
+import java.awt.Shape
 
 import net.kogics.kojo.core.Picture
 import net.kogics.kojo.kgeom.PolyLine
@@ -32,7 +33,11 @@ trait Transformer extends Picture with CorePicOps2 {
   def rotate(angle: Double) = tpic.rotate(angle)
   def rotateAboutPoint(angle: Double, x: Double, y: Double) = tpic.rotateAboutPoint(angle, x, y)
   def scale(factor: Double) = tpic.scale(factor)
-  def scale(x: Double, y: Double) = tpic.scale(x, y)
+  def scaleAboutPoint(factor: Double, x: Double, y: Double) = tpic.scaleAboutPoint(factor, x, y)
+  def scaleAboutPoint(factorX: Double, factorY: Double, x: Double, y: Double) =
+    tpic.scaleAboutPoint(factorX, factorY, x, y)
+  def scale(xFactor: Double, yFactor: Double) = tpic.scale(xFactor, yFactor)
+  def shear(shearX: Double, shearY: Double): Unit = tpic.shear(shearX, shearY)
   def opacityMod(f: Double) = tpic.opacityMod(f)
   def hueMod(f: Double) = tpic.hueMod(f)
   def satMod(f: Double) = tpic.satMod(f)
@@ -61,6 +66,7 @@ trait Transformer extends Picture with CorePicOps2 {
   def setFillColor(color: Paint) = tpic.setFillColor(color)
   def opacity = tpic.opacity
   def setOpacity(o: Double) = tpic.setOpacity(o)
+  def setZIndex(zIndex: Int): Unit = tpic.setZIndex(zIndex)
   def morph(fn: Seq[PolyLine] => Seq[PolyLine]) = tpic.morph(fn)
   def foreachPolyLine(fn: PolyLine => Unit) = tpic.foreachPolyLine(fn)
   def distanceTo(other: Picture) = tpic.distanceTo(other)
@@ -247,7 +253,7 @@ case class PreDrawTransform(fn: Picture => Unit)(pic: Picture) extends Transform
     tpic.draw()
   }
   override def copy = PreDrawTransform(fn)(pic.copy)
-  override def toString() = s"PreDrawTransform($fn) (Id: ${System.identityHashCode(this)}) -> ${tpic.toString}"
+  override def toString() = s"PreDrawTransform (Id: ${System.identityHashCode(this)} -> ${tpic.toString})"
 }
 
 case class PostDrawTransform(fn: Picture => Unit)(pic: Picture) extends Transform(pic) {
@@ -256,7 +262,7 @@ case class PostDrawTransform(fn: Picture => Unit)(pic: Picture) extends Transfor
     fn(tpic)
   }
   override def copy = PostDrawTransform(fn)(pic.copy)
-  override def toString() = s"PostDrawTransform($fn) (Id: ${System.identityHashCode(this)}) -> ${tpic.toString}"
+  override def toString() = s"PostDrawTransform (Id: ${System.identityHashCode(this)} -> ${tpic.toString})"
 }
 
 abstract class ComposableTransformer extends Function1[Picture, Picture] { outer =>
@@ -322,15 +328,19 @@ case object AxesOnc extends ComposableTransformer {
 }
 
 case class Fillc(color: Paint) extends ComposableTransformer {
-  def apply(p: Picture) = Fill(color)(p)
+  def apply(p: Picture) = p.thatsFilledWith(color)
 }
 
 case class Strokec(color: Paint) extends ComposableTransformer {
-  def apply(p: Picture) = Stroke(color)(p)
+  def apply(p: Picture) = p.thatsStrokeColored(color)
 }
 
 case class StrokeWidthc(w: Double) extends ComposableTransformer {
-  def apply(p: Picture) = StrokeWidth(w)(p)
+  def apply(p: Picture) = p.thatsStrokeSized(w)
+}
+
+case class Clippedc(s: Shape) extends ComposableTransformer {
+  def apply(p: Picture) = p.withClipping(s)
 }
 
 case class PreDrawTransformc(fn: Picture => Unit) extends ComposableTransformer {

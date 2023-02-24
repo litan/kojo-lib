@@ -8,8 +8,8 @@ object Collidium {
     val builtins = kojo.builtins
 
     import builtins._
-    import CanvasAPI._
-    import TurtleAPI._
+    import TSCanvas._
+    import Tw._
 
     // `Collidium` sample from Kojo Showcase menu
 
@@ -78,9 +78,9 @@ object Collidium {
       sq()
     }
     val slingPts = ArrayBuffer.empty[Point]
-    var sling = Picture.hline(1)
-    var paddle = Picture.hline(1)
-    var tempPaddle = paddle
+    var sling: Picture = Picture.hline(1)
+    var paddle: Picture = Picture.hline(1)
+    var tempPaddle: Picture = paddle
     drawAndHide(paddle)
 
     ball.onMousePress { (x, y) =>

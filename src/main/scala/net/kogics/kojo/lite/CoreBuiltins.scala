@@ -15,13 +15,14 @@ import io.github.jdiemke.triangulation.Triangle2D
 import net.kogics.kojo.core.Rectangle
 import net.kogics.kojo.core.TSCanvasFeatures
 import net.kogics.kojo.kmath.Rationals
+import net.kogics.kojo.picture.PicCache
 import net.kogics.kojo.turtle.LoTurtle
 import net.kogics.kojo.util.PerlinNoiseImproved
 import net.kogics.kojo.util.PerlinNoiseProcessing
 import net.kogics.kojo.util.Utils
 
 trait CoreBuiltins extends Rationals {
-  def CanvasAPI: TSCanvasFeatures
+  def TSCanvas: TSCanvasFeatures
 
   type Turtle = core.Turtle
   type Color = java.awt.Color
@@ -73,6 +74,7 @@ trait CoreBuiltins extends Rationals {
 
   val kmath = net.kogics.kojo.kmath.Kmath
   val mathx = kmath
+  val easing = net.kogics.kojo.kmath.KEasing
 
   val slow = core.Slow
   val medium = core.Medium
@@ -123,7 +125,9 @@ trait CoreBuiltins extends Rationals {
     else
       lowerBound + randomDouble(upperBound - lowerBound)
   }
-  def randomNormalDouble = Random.nextGaussian()
+
+  def randomNormalDouble: Double = Random.nextGaussian()
+  def randomNormalDouble(mean: Double, stdDev: Double): Double = randomNormalDouble * stdDev + mean
   def randomBoolean = Random.nextBoolean
   def randomInt = Random.nextInt
   def randomLong = Random.nextLong
@@ -157,7 +161,7 @@ trait CoreBuiltins extends Rationals {
   def randomColor = Color(random(256), random(256), random(256))
   def randomTransparentColor = Color(random(256), random(256), random(256), 100 + random(156))
   def initRandomGenerator(): Unit = {
-    initRandomGenerator(randomLong)
+    initRandomGenerator(System.currentTimeMillis())
   }
 
   def initRandomGenerator(seed: Long): Unit = {
@@ -205,14 +209,15 @@ trait CoreBuiltins extends Rationals {
     cm.linearMultipleGradient(x1, y1, x2, y2, distribution, colors, cyclic)
   def ColorHSB(h: Double, s: Double, b: Double) =
     java.awt.Color.getHSBColor((h / 360).toFloat, (s / 100).toFloat, (b / 100).toFloat)
-  def pause(secs: Double) = Thread.sleep((secs * 1000).toLong)
+  def pause(seconds: Double) = pauseMillis((seconds * 1000).toLong)
+  def pauseMillis(milliSeconds: Long) = Thread.sleep(milliSeconds)
 
   def readln(prompt: String): String
   def setBackground(c: Paint): Unit
   def Font(name: String, size: Int) = new Font(name, JFont.PLAIN, size)
   def Font(name: String, size: Int, style: Int) = new Font(name, style, size)
   def textExtent(text: String, fontSize: Int, fontName: String = null) = Utils.runInSwingThreadAndWait {
-    val tnode = Utils.textNode(text, 0, 0, CanvasAPI.camScale, fontSize, if (fontName == null) None else Some(fontName))
+    val tnode = Utils.textNode(text, 0, 0, TSCanvas.camScale, fontSize, if (fontName == null) None else Some(fontName))
     val b = tnode.getFullBounds
     new Rectangle(new Point(b.x, b.y), new Point(b.x + b.width, b.y + b.height))
   }
@@ -242,10 +247,25 @@ trait CoreBuiltins extends Rationals {
   val rot = picture.rot _
   def id = picture.trans(0, 0)
   def scale(f: Double) = picture.scale(f)
-  def scale(x: Double, y: Double) = picture.scale(x, y)
-  def draw(pictures: Picture*) = pictures.foreach { _.draw() }
-  def draw(pictures: collection.Seq[Picture]) = pictures.foreach { _.draw() }
-
+  def scale(xf: Double, yf: Double) = picture.scale(xf, yf)
+  def scalep(f: Double, x: Double, y: Double) = picture.scalep(f, x, y)
+  def draw(pictures: Picture*): Unit = draw(pictures)
+  protected[lite] def checkForLargeDrawing(): Unit = {
+    if (PicCache.size > 60000) {
+      println("There are too many pics in your drawing, and trying to draw them might freeze Kojo.")
+      println("If you still want to go ahead with this, use the pic.draw() method.")
+      println("Or use Picture.fromSketch(...).")
+      assert(false, "Too many pics to draw - Kojo might freeze.")
+    }
+  }
+  def draw(pictures: collection.Seq[Picture]): Unit = {
+    checkForLargeDrawing()
+    PicCache.freshPics(pictures).foreach { pic =>
+      pic.invisible()
+      pic.draw()
+      pic.visible()
+    }
+  }
   type Image = java.awt.Image
   def image(height: Int, width: Int) = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB)
   def setImagePixel(image: BufferedImage, x: Int, y: Int, c: Color) = image.setRGB(x, image.getHeight - 1 - y, c.getRGB)
@@ -254,10 +274,10 @@ trait CoreBuiltins extends Rationals {
   def image(url: URL): BufferedImage = Utils.loadUrlImage(url)
 
   // For younger kids
-  def clr() = { CanvasAPI.clear(); CanvasAPI.turtle0.invisible() }
+  def clr() = { TSCanvas.clear(); TSCanvas.turtle0.invisible() }
   def nt: LoTurtle = nt(0, 0)
   def nt(x: Double = 0, y: Double = 0): LoTurtle = {
-    nt(CanvasAPI.newTurtle(x, y, "/images/blue-turtle32.png"))
+    nt(TSCanvas.newTurtle(x, y, "/images/blue-turtle32.png"))
   }
   def nt(t: core.Turtle): LoTurtle = new LoTurtle(t)
   def rpt(n: Int)(code: => LoTurtle): LoTurtle = {

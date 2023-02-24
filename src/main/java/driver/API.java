@@ -20,8 +20,8 @@ class API {
     }
     public static void initBuiltins() {
         b = kojo.builtins();
-        t = b.TurtleAPI();
-        c = b.CanvasAPI();
+        t = b.Tw();
+        c = b.TSCanvas();
     }
 
     public static void clear() {

@@ -16,11 +16,8 @@
 package net.kogics.kojo
 package staging
 
-import javax.swing._
-
-import core._
-import util.Math
-import Impl.API
+import net.kogics.kojo.kmath.{ Kmath => Math }
+import net.kogics.kojo.staging.Impl.API
 
 object ColorMaker {
   def apply(mode: GRAY) = new GrayColorMaker(mode)
