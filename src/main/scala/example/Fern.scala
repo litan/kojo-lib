@@ -6,7 +6,7 @@ object Fern {
   def main(args: Array[String]): Unit = {
     val kojo = KojoFrame.create()
     val builtins = kojo.builtins
-    
+
     import builtins._
     import CanvasAPI._
     import TurtleAPI._

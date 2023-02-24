@@ -24,7 +24,6 @@ class TurtleWorldAPI(turtle0: => core.Turtle) extends TurtleMover {
 
   def turn(angle: Double) = turtle0.turn(angle)
 
-
   def towards(x: Double, y: Double) = turtle0.towards(x, y)
   def heading: Double = turtle0.heading
   def penDown() = turtle0.penDown()

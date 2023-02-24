@@ -16,15 +16,24 @@
 package net.kogics.kojo
 package lite
 
-import net.kogics.kojo.core.{DelegatingSpriteListener, SpriteListener}
-import net.kogics.kojo.lite.action.{FullScreenBaseAction, FullScreenCanvasAction, FullScreenSupport}
-import net.kogics.kojo.lite.canvas.SpriteCanvas
-import net.kogics.kojo.util.Utils
-
-import java.awt.{Color, Cursor, Font, Toolkit}
+import java.awt.Color
+import java.awt.Cursor
+import java.awt.Font
+import java.awt.Toolkit
 import java.util.prefs.Preferences
 import javax.swing.plaf.FontUIResource
-import javax.swing.{JCheckBoxMenuItem, JFrame, JMenu, UIManager}
+import javax.swing.JCheckBoxMenuItem
+import javax.swing.JFrame
+import javax.swing.JMenu
+import javax.swing.UIManager
+
+import net.kogics.kojo.core.DelegatingSpriteListener
+import net.kogics.kojo.core.SpriteListener
+import net.kogics.kojo.lite.action.FullScreenBaseAction
+import net.kogics.kojo.lite.action.FullScreenCanvasAction
+import net.kogics.kojo.lite.action.FullScreenSupport
+import net.kogics.kojo.lite.canvas.SpriteCanvas
+import net.kogics.kojo.util.Utils
 
 class KojoCtx extends core.KojoCtx {
   val prefs = Preferences.userRoot().node("Kojolite-Prefs")
@@ -46,7 +55,7 @@ class KojoCtx extends core.KojoCtx {
 
   lazy val screenDpiFontDelta: Int = {
     // alternative approach
-    // (baseFontSize * screenDPI / 96.0 - baseFontSize).round.toInt 
+    // (baseFontSize * screenDPI / 96.0 - baseFontSize).round.toInt
     val delta1 = screenSize.width match {
       case n if n <= 1440 => 0
       case n if n <= 1680 => 2
@@ -100,7 +109,8 @@ class KojoCtx extends core.KojoCtx {
     prefs.put("lastLoadStoreDir", lastLoadStoreDir)
   }
 
-  @volatile var _lastColor = new Color(Integer.parseInt(prefs.get("lastColor", Integer.toString(Color.red.getRGB()))), true)
+  @volatile var _lastColor =
+    new Color(Integer.parseInt(prefs.get("lastColor", Integer.toString(Color.red.getRGB()))), true)
   def lastColor: Color = _lastColor
   def lastColor_=(c: Color): Unit = {
     _lastColor = c
@@ -112,7 +122,7 @@ class KojoCtx extends core.KojoCtx {
 
   def knownColors2 = doodle.ColorMap.knownColors.keys.toList
   def knownColor2(name: String) = doodle.ColorMap.knownColors(name)
-  
+
   def readInput(prompt: String): String = ""
   @volatile var astStopPhase = "typer"
   def setAstStopPhase(phase: String): Unit = {

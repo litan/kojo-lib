@@ -6,7 +6,7 @@ object TicTacToeUnbeatable {
   def main(args: Array[String]): Unit = {
     val kojo = KojoFrame.create()
     val builtins = kojo.builtins
-    
+
     import builtins._
     import CanvasAPI._
     import TurtleAPI._
@@ -26,7 +26,7 @@ object TicTacToeUnbeatable {
       cleari()
       val cb = canvasBounds
       setBackground(black)
-      //disablePanAndZoom()
+      // disablePanAndZoom()
       val len = 100
 
       val boardSize = len * 3

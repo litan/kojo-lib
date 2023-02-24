@@ -15,13 +15,19 @@
 
 package net.kogics.kojo.lite.action
 
-import java.awt.{Frame, GraphicsEnvironment}
 import java.awt.event.ActionEvent
 import java.awt.event.KeyAdapter
 import java.awt.event.KeyEvent
-import javax.swing.{AbstractAction, JCheckBoxMenuItem, JComponent, JFrame, WindowConstants}
-import net.kogics.kojo.lite.KojoCtx
+import java.awt.Frame
+import java.awt.GraphicsEnvironment
+import javax.swing.AbstractAction
+import javax.swing.JCheckBoxMenuItem
+import javax.swing.JComponent
+import javax.swing.JFrame
+import javax.swing.WindowConstants
+
 import net.kogics.kojo.lite.canvas.SpriteCanvas
+import net.kogics.kojo.lite.KojoCtx
 import net.kogics.kojo.util.Utils
 
 object FullScreenSupport {
@@ -46,8 +52,7 @@ object FullScreenSupport {
   }
 }
 
-class FullScreenBaseAction(key: String, fsComp: => JComponent, oldFrame: => JFrame)
-  extends AbstractAction(key) {
+class FullScreenBaseAction(key: String, fsComp: => JComponent, oldFrame: => JFrame) extends AbstractAction(key) {
   import FullScreenSupport._
   var fullScreenFrame: JFrame = _
   var fullScreen = false
@@ -110,11 +115,11 @@ object FullScreenCanvasAction {
 }
 
 class FullScreenCanvasAction(canvas: => SpriteCanvas, frame: => JFrame)
-  extends FullScreenBaseAction(
-    Utils.loadString("S_FullScreenCanvas"),
-    canvas,
-    frame
-  ) {
+    extends FullScreenBaseAction(
+      Utils.loadString("S_FullScreenCanvas"),
+      canvas,
+      frame
+    ) {
   override def enterFullScreen(): Unit = {
     canvas.setFocusable(true) // make canvas work with frame.getMostRecentFocusOwner()
     super.enterFullScreen()

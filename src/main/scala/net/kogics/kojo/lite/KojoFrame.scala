@@ -1,14 +1,20 @@
 package net.kogics.kojo.lite
 
+import java.awt.BorderLayout
+import java.awt.Dimension
+import java.awt.Font
+import java.awt.Frame
+import javax.swing.plaf.FontUIResource
+import javax.swing.JFrame
+import javax.swing.UIManager
+import javax.swing.WindowConstants
+
 import net.kogics.kojo.lite.canvas.SpriteCanvas
-import net.kogics.kojo.music.{FuguePlayer, KMp3}
+import net.kogics.kojo.music.FuguePlayer
+import net.kogics.kojo.music.KMp3
 import net.kogics.kojo.staging
 import net.kogics.kojo.turtle.TurtleWorldAPI
 import net.kogics.kojo.util.Utils
-
-import java.awt.{BorderLayout, Dimension, Font, Frame}
-import javax.swing.plaf.FontUIResource
-import javax.swing.{JFrame, UIManager, WindowConstants}
 
 object KojoFrame {
   @volatile var instanceCount = 0
@@ -165,11 +171,13 @@ class KojoFrame private (width: Int, height: Int, showLoading: Boolean) {
       UIManager.getLookAndFeelDefaults.put("defaultFont", new FontUIResource("Arial", Font.PLAIN, 12))
     }
     else {
-      UIManager.getInstalledLookAndFeels.find {
-        _.getName == "Nimbus"
-      }.foreach { nim =>
-        UIManager.setLookAndFeel(nim.getClassName)
-      }
+      UIManager.getInstalledLookAndFeels
+        .find {
+          _.getName == "Nimbus"
+        }
+        .foreach { nim =>
+          UIManager.setLookAndFeel(nim.getClassName)
+        }
     }
   }
 }

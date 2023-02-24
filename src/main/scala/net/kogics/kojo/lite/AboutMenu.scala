@@ -1,12 +1,15 @@
 package net.kogics.kojo
 package lite
 
-import net.kogics.kojo.util.Utils
-
-import java.awt.event.{ActionEvent, ActionListener}
-import java.awt.{Component, Dimension, Insets}
-import javax.swing.text.html.HTMLEditorKit
+import java.awt.event.ActionEvent
+import java.awt.event.ActionListener
+import java.awt.Component
+import java.awt.Dimension
+import java.awt.Insets
 import javax.swing._
+import javax.swing.text.html.HTMLEditorKit
+
+import net.kogics.kojo.util.Utils
 
 class AboutMenu(kojoCtx: core.KojoCtx) {
   val frame = kojoCtx.frame
@@ -26,8 +29,7 @@ class AboutMenu(kojoCtx: core.KojoCtx) {
       val aboutText = new JEditorPane
       aboutText.setEditorKit(new HTMLEditorKit)
       aboutText.setEditable(false)
-      aboutText.setText(
-        s"""<html><body>
+      aboutText.setText(s"""<html><body>
 <div style="font-size: ${12 + kojoCtx.screenDpiFontDelta}pt; font-family: Verdana, 'Verdana CE',  Arial, 'Arial CE', 'Lucida Grande CE', lucida, 'Helvetica CE', sans-serif; ">
               <strong>Kojo Lib</strong> ${Versions.KojoLibMajorVersion}<br/>
               Version: ${Versions.KojoLibVersion}  <em>${Versions.KojoLibRevision}</em><br/>

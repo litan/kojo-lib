@@ -16,14 +16,13 @@
 package net.kogics.kojo
 package picture
 
-import java.awt.Paint
 import java.awt.geom.AffineTransform
+import java.awt.Paint
 
 import net.kogics.kojo.core.Picture
 import net.kogics.kojo.kgeom.PolyLine
-
-import util.Utils
 import net.kogics.kojo.picture.PicCache.freshPic
+import util.Utils
 
 trait Transformer extends Picture with CorePicOps2 {
   val tpic: Picture
@@ -262,7 +261,7 @@ case class PostDrawTransform(fn: Picture => Unit)(pic: Picture) extends Transfor
 
 abstract class ComposableTransformer extends Function1[Picture, Picture] { outer =>
   def apply(p: Picture): Picture
-  def -> (p: Picture) = apply(p)
+  def ->(p: Picture) = apply(p)
   def *(other: ComposableTransformer) = new ComposableTransformer {
     def apply(p: Picture): Picture = {
       outer.apply(other.apply(p))

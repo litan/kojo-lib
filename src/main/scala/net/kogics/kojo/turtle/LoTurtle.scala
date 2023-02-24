@@ -46,7 +46,7 @@ class LoTurtle(val t: core.Turtle) extends Dynamic {
   def pc(c: Any) = { t.setPenColor(c.asInstanceOf[Color]); this }
   def fc(c: Any) = { t.setFillColor(c.asInstanceOf[Color]); this }
   def pt(n: Any) = { t.setPenThickness(n.asInstanceOf[Int]); this }
-  def jb(x: Any, y: Any) = { this hp x rt 90 hp y lt 90; this }
+  def jb(x: Any, y: Any) = { this.hp(x).rt(90).hp(y).lt(90); this }
   def jt(x: Any, y: Any) = { t.setPosition(toD(x), toD(y)); this }
   def bon() = { t.beamsOn(); this }
   def boff() = { t.beamsOff(); this }
@@ -91,7 +91,9 @@ class LoTurtle(val t: core.Turtle) extends Dynamic {
     }
     catch {
       case t: NoSuchElementException =>
-        throw new RuntimeException(s"Invalid command $name with ${args.length} input(s). Check command name and input(s).")
+        throw new RuntimeException(
+          s"Invalid command $name with ${args.length} input(s). Check command name and input(s)."
+        )
     }
   }
 }

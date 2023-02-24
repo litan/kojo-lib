@@ -21,42 +21,42 @@ object Othello {
   val ui_computer = DropDown("Two Players", "Computer plays Black", "Computer plays White")
 
   def main(args: Array[String]): Unit = {
-    drawCentered(scale(2.0) ->
-      Picture.widget(
-        ColPanel(
-          RowPanel(Label(welcome)),
-          RowPanel(Label("Preplaced Stones"), ui_variant),
-          RowPanel(Label("Board Size"), ui_board),
-          RowPanel(Label("First Move"), ui_toPlay),
-          RowPanel(Label("Level"), ui_level),
-          RowPanel(Label("Players"), ui_computer),
-          RowPanel(Button("Play!") {
-            val size = ui_board.value
-            val variant = ui_variant.value match {
-              case "Traditional" => 0
-              case _             => 1
-            }
-            if (variant != 0 && size < 7) {
-              println("We need a 7x7 or larger board for preplaced stone variation")
-            }
-            else {
-              val firstPlayer = ui_toPlay.value match {
-                case "Black" => Black
-                case _       => White
+    drawCentered(
+      scale(2.0) ->
+        Picture.widget(
+          ColPanel(
+            RowPanel(Label(welcome)),
+            RowPanel(Label("Preplaced Stones"), ui_variant),
+            RowPanel(Label("Board Size"), ui_board),
+            RowPanel(Label("First Move"), ui_toPlay),
+            RowPanel(Label("Level"), ui_level),
+            RowPanel(Label("Players"), ui_computer),
+            RowPanel(Button("Play!") {
+              val size = ui_board.value
+              val variant = ui_variant.value match {
+                case "Traditional" => 0
+                case _             => 1
               }
-              val computerPlays = ui_computer.value match {
-                case "Two Players"          => Empty
-                case "Computer plays Black" => Black
-                case _                      => White
+              if (variant != 0 && size < 7) {
+                println("We need a 7x7 or larger board for preplaced stone variation")
               }
-              val board = new EBoard(size, firstPlayer, variant)
-              ABS.maxDepth = ui_level.value
-              new UI(kojo, board, new History(board), computerPlays)
-            }
-          }
+              else {
+                val firstPlayer = ui_toPlay.value match {
+                  case "Black" => Black
+                  case _       => White
+                }
+                val computerPlays = ui_computer.value match {
+                  case "Two Players"          => Empty
+                  case "Computer plays Black" => Black
+                  case _                      => White
+                }
+                val board = new EBoard(size, firstPlayer, variant)
+                ABS.maxDepth = ui_level.value
+                new UI(kojo, board, new History(board), computerPlays)
+              }
+            })
           )
         )
-      )
     )
   }
 

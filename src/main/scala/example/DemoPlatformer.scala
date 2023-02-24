@@ -6,7 +6,7 @@ object DemoPlatformer {
   def main(args: Array[String]): Unit = {
     val kojo = KojoFrame.create()
     val builtins = kojo.builtins
-    
+
     import builtins._
     import CanvasAPI._
     import TurtleAPI._
@@ -17,8 +17,12 @@ object DemoPlatformer {
       cleari()
       disablePanAndZoom()
 
-      println("To win the game, find and drink the red-ball potion and then return to the starting point to drink the (initially covered) green-ball potion.")
-      println(s"\nTo modify the game layout, change '$installDir/examples/tiledgame/level1.tmx' using the Tiled editor from www.mapeditor.org")
+      println(
+        "To win the game, find and drink the red-ball potion and then return to the starting point to drink the (initially covered) green-ball potion."
+      )
+      println(
+        s"\nTo modify the game layout, change '$installDir/examples/tiledgame/level1.tmx' using the Tiled editor from www.mapeditor.org"
+      )
 
       scroll(-canvasBounds.x, canvasBounds.y)
       setBackground(ColorMaker.hsl(189, 0.03, 0.45))
@@ -37,35 +41,43 @@ object DemoPlatformer {
         val stillRight = picBatch(playerPicture(sheet.imageAt(0, 0)))
         val stillLeft = picBatch(playerPicture(sheet.imageAt(0, 1)))
 
-        val runningRight = picBatch(List(
-          sheet.imageAt(0, 2),
-          sheet.imageAt(1, 2),
-          sheet.imageAt(2, 2),
-          sheet.imageAt(3, 2),
-          sheet.imageAt(4, 2)
-        ).map(playerPicture))
+        val runningRight = picBatch(
+          List(
+            sheet.imageAt(0, 2),
+            sheet.imageAt(1, 2),
+            sheet.imageAt(2, 2),
+            sheet.imageAt(3, 2),
+            sheet.imageAt(4, 2)
+          ).map(playerPicture)
+        )
 
-        val runningLeft = picBatch(List(
-          sheet.imageAt(0, 3),
-          sheet.imageAt(1, 3),
-          sheet.imageAt(2, 3),
-          sheet.imageAt(3, 3),
-          sheet.imageAt(4, 3)
-        ).map(playerPicture))
+        val runningLeft = picBatch(
+          List(
+            sheet.imageAt(0, 3),
+            sheet.imageAt(1, 3),
+            sheet.imageAt(2, 3),
+            sheet.imageAt(3, 3),
+            sheet.imageAt(4, 3)
+          ).map(playerPicture)
+        )
 
-        val jumpingRight = picBatch(List(
-          sheet.imageAt(0, 0),
-          sheet.imageAt(1, 0),
-          sheet.imageAt(2, 0),
-          sheet.imageAt(3, 0)
-        ).map(playerPicture))
+        val jumpingRight = picBatch(
+          List(
+            sheet.imageAt(0, 0),
+            sheet.imageAt(1, 0),
+            sheet.imageAt(2, 0),
+            sheet.imageAt(3, 0)
+          ).map(playerPicture)
+        )
 
-        val jumpingLeft = picBatch(List(
-          sheet.imageAt(0, 1),
-          sheet.imageAt(1, 1),
-          sheet.imageAt(2, 1),
-          sheet.imageAt(3, 1)
-        ).map(playerPicture))
+        val jumpingLeft = picBatch(
+          List(
+            sheet.imageAt(0, 1),
+            sheet.imageAt(1, 1),
+            sheet.imageAt(2, 1),
+            sheet.imageAt(3, 1)
+          ).map(playerPicture)
+        )
 
         var currentPic = stillRight
         currentPic.setPosition(playerPos)
@@ -197,10 +209,12 @@ object DemoPlatformer {
         // with the player in an adjacent tile
         def attackerPicture(img: Image) = scale(0.98) * trans(0.2, 0.2) -> Picture.image(img)
 
-        var currentPic = picBatch(List(
-          sheet.imageAt(0, 6),
-          sheet.imageAt(1, 6)
-        ).map(attackerPicture))
+        var currentPic = picBatch(
+          List(
+            sheet.imageAt(0, 6),
+            sheet.imageAt(1, 6)
+          ).map(attackerPicture)
+        )
 
         currentPic.setPosition(playerPos)
 

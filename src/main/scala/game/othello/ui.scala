@@ -3,11 +3,7 @@ package game.othello
 
 import net.kogics.kojo.lite.KojoFrame
 
-class UI(
-  kojo:          KojoFrame,
-  board:         EBoard,
-  history:       History,
-  computerPlays: Stone) {
+class UI(kojo: KojoFrame, board: EBoard, history: History, computerPlays: Stone) {
 
   val builtins = kojo.builtins
   import builtins._
@@ -34,13 +30,16 @@ class UI(
   def drawTheBoard = {
     val innerCorners = ArrayBuffer.empty[Picture]
     val innerCornerColor = Color(255, 215, 85, 101) // pale yellowish color
-    for (x <- board.range; y <- board.range) {
+    for {
+      x <- board.range
+      y <- board.range
+    } {
       val room = Room(y, x)
       val edgeColor =
         if (board.isInnerCorner(room)) innerCornerColor else purple
       val pic = penColor(edgeColor) *
-      fillColor(stone2color(board.stone(y, x))) ->
-      Picture.rectangle(length, length)
+        fillColor(stone2color(board.stone(y, x))) ->
+        Picture.rectangle(length, length)
       pic.setPosition(room2point(room))
       pic.draw()
       pic2room += (pic -> room)
@@ -130,7 +129,10 @@ class UI(
 
   def newGame = if (board.moveCount() != 1) {
     board.reset("New game:")
-    for (x <- board.range; y <- board.range)
+    for {
+      x <- board.range
+      y <- board.range
+    }
       paint(Room(y, x), board.stone(y, x))
     history.reset()
     clearLastMove
@@ -145,16 +147,19 @@ class UI(
   def showMoves = {
     clearMoves
     if (hintsOn) {
-      val ordered = moves.map { r =>
-        (r, board.movePayoff(r, board.player()))
-      }.sortBy { p => p._2 }.reverse
+      val ordered = moves
+        .map { r =>
+          (r, board.movePayoff(r, board.player()))
+        }
+        .sortBy { p => p._2 }
+        .reverse
       if (ordered.size > 0) {
         val maxPayOff = ordered.head._2
-        movePics = ordered map {
+        movePics = ordered.map {
           case (r, payOff) =>
             val color = if (payOff == maxPayOff) yellow else orange
             val pic = penColor(color) * penThickness(3) * fillColor(noColor) ->
-            Picture.circle(l4)
+              Picture.circle(l4)
             pic.setPosition(room2point(r, false))
             pic.forwardInputTo(room2pic(r))
             pic.draw()
@@ -171,7 +176,7 @@ class UI(
       board.lastMove match {
         case Some(room) =>
           lastMovePic = penColor(blue) * penThickness(3) * fillColor(noColor) ->
-          Picture.circle(l4)
+            Picture.circle(l4)
           lastMovePic.setPosition(room2point(room, false))
           lastMovePic.forwardInputTo(room2pic(room))
           lastMovePic.draw()
@@ -234,7 +239,10 @@ class UI(
     }
     def repaint = {
       refreshScoreBoard
-      for (x <- board.range; y <- board.range)
+      for {
+        x <- board.range
+        y <- board.range
+      }
         paint(Room(y, x), board.stone(y, x))
       showLastMove
       showMoves
@@ -272,7 +280,8 @@ class UI(
             Button("Undo") { mem.undo },
             Button("Redo") { mem.redo },
             Button("Toggle Full Screen") { toggleFullScreenCanvas() },
-            Button("New Game") { newGame })
+            Button("New Game") { newGame }
+          )
         )
     )
     scoreboard
@@ -283,7 +292,10 @@ class UI(
     if (board.isGameOver) Seq("Game is over") ++ score
     else if (board.moveCount() == 1) Seq(s"${board.startingPlayer.cname} to play") ++ score
     else if (computerInPlay) Seq(s"Computer computing next move...") ++ score
-    else Seq(s"Move ${board.moveCount()}. ${board.player().cname} to play" + (if (board.skippedTurn) " again" else "")) ++ score
+    else
+      Seq(
+        s"Move ${board.moveCount()}. ${board.player().cname} to play" + (if (board.skippedTurn) " again" else "")
+      ) ++ score
   }
   def refreshScoreBoard: Unit =
     scoreboard.zipWithIndex.foreach {
@@ -301,7 +313,7 @@ class UI(
 
   val hintPics = new HintPics(length)
 
-  //if (computerInPlay) computerToMove // todo: we get an empty screen while the computer computes the first move!
+  // if (computerInPlay) computerToMove // todo: we get an empty screen while the computer computes the first move!
 
   // nesting is needed for imported types and vals like Picture and colors (red, pink, etc..)
   class HintPics(length: Int) {
@@ -335,7 +347,5 @@ class UI(
     draw
     toggleV
   }
-  
+
 }
-
-

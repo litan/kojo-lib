@@ -16,20 +16,22 @@
 package net.kogics.kojo
 package picture
 
+import java.awt.geom.AffineTransform
+import java.awt.image.BufferedImage
 import java.awt.BasicStroke
 import java.awt.Color
 import java.awt.Paint
-import java.awt.geom.AffineTransform
-import java.awt.image.BufferedImage
 import java.util.concurrent.Future
 
 import scala.collection.mutable.ArrayBuffer
 
+import com.vividsolutions.jts.geom.util.AffineTransformation
 import com.vividsolutions.jts.geom.Coordinate
 import com.vividsolutions.jts.geom.Geometry
 import com.vividsolutions.jts.geom.TopologyException
-import com.vividsolutions.jts.geom.util.AffineTransformation
-
+import edu.umd.cs.piccolo.activities.PActivity
+import edu.umd.cs.piccolo.nodes.PPath
+import edu.umd.cs.piccolo.PNode
 import net.kogics.kojo.core.Cm
 import net.kogics.kojo.core.Inch
 import net.kogics.kojo.core.Picture
@@ -39,10 +41,6 @@ import net.kogics.kojo.kgeom.PolyLine
 import net.kogics.kojo.picture.PicCache.freshPics
 import net.kogics.kojo.util.Math
 import net.kogics.kojo.util.Utils
-
-import edu.umd.cs.piccolo.PNode
-import edu.umd.cs.piccolo.activities.PActivity
-import edu.umd.cs.piccolo.nodes.PPath
 
 trait GeomPolygon { self: Picture =>
   lazy val geomPoly = {
@@ -55,7 +53,9 @@ trait GeomPolygon { self: Picture =>
 }
 
 trait UnsupportedOps {
-  def notSupported(name: String, reason: String) = throw new UnsupportedOperationException(s"$name - operation not available $reason:\n${toString}")
+  def notSupported(name: String, reason: String) = throw new UnsupportedOperationException(
+    s"$name - operation not available $reason:\n${toString}"
+  )
 }
 
 trait CorePicOps extends GeomPolygon with UnsupportedOps { self: Picture with RedrawStopper =>
@@ -75,7 +75,7 @@ trait CorePicOps extends GeomPolygon with UnsupportedOps { self: Picture with Re
 
   def draw(): Unit = {
     realDraw()
-    //    Need to do the following if we ever have turtle commands that modify the turtle's layer transform    
+    //    Need to do the following if we ever have turtle commands that modify the turtle's layer transform
     //    Utils.runInSwingThread {
     //      pgTransform = t2t(tnode.getTransformReference(true))
     //    }
@@ -409,9 +409,15 @@ object Pic {
   def apply(painter: Painter)(implicit canvas: SCanvas) = new Pic(painter)
 }
 
-class Pic(painter: Painter)(implicit val canvas: SCanvas) extends Picture with CorePicOps with CorePicOps2 with TNodeCacher with RedrawStopper {
+class Pic(painter: Painter)(implicit val canvas: SCanvas)
+    extends Picture
+    with CorePicOps
+    with CorePicOps2
+    with TNodeCacher
+    with RedrawStopper {
   @volatile var _t: canvas.TurtleLike = _
-  val ErrMsg = "Unable to create picture turtle. This could be because you have a draw() call after an animate{ } or morph{ } call"
+  val ErrMsg =
+    "Unable to create picture turtle. This could be because you have a draw() call after an animate{ } or morph{ } call"
 
   def t = {
     if (_t == null) Utils.runInSwingThreadAndWait(10000, ErrMsg) {
@@ -569,7 +575,11 @@ class Pic0(painter: Painter)(implicit canvas0: SCanvas) extends Pic(painter) {
 }
 
 abstract class BasePicList(val pics: List[Picture])
-  extends Picture with CorePicOps with CorePicOps2 with TNodeCacher with RedrawStopper {
+    extends Picture
+    with CorePicOps
+    with CorePicOps2
+    with TNodeCacher
+    with RedrawStopper {
   if (pics.isEmpty) {
     throw new IllegalArgumentException("A Picture List needs to have at least one Picture.")
   }
@@ -650,7 +660,7 @@ abstract class BasePicList(val pics: List[Picture])
   protected def initGeom() = {
     var pg = pics(0).picGeom
     pics.tail.foreach { pic =>
-      pg = pg union pic.picGeom
+      pg = pg.union(pic.picGeom)
     }
     pg
   }

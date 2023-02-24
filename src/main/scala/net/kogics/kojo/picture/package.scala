@@ -14,25 +14,29 @@
  */
 package net.kogics.kojo
 
-import java.awt.{Color, Graphics2D, Image, Paint}
 import java.awt.event.KeyEvent
 import java.awt.geom.GeneralPath
 import java.awt.image.BufferedImageOp
+import java.awt.Color
+import java.awt.Graphics2D
+import java.awt.Image
+import java.awt.Paint
 import java.net.URL
 import java.util.Random
 import javax.swing.JComponent
+
 import com.jhlabs.image.LightFilter
 import com.jhlabs.image.LightFilter.Light
 import com.vividsolutions.jts.geom.Coordinate
 import com.vividsolutions.jts.geom.GeometryFactory
 import com.vividsolutions.jts.geom.PrecisionModel
+import core.Picture
 import net.kogics.kojo.core.Cm
 import net.kogics.kojo.core.Inch
 import net.kogics.kojo.core.Pixel
 import net.kogics.kojo.core.SCanvas
 import net.kogics.kojo.util.Utils
 import net.kogics.kojo.util.Vector2D
-import core.Picture
 
 package object picture {
   type Painter = core.Painter
@@ -366,15 +370,17 @@ package object picture {
     // returns points on the obstacle that contain the given collision coordinate
     def obstacleCollPoints(c: Coordinate): Option[Array[Coordinate]] = {
       obstacle.picGeom.getCoordinates.sliding(2).find { cs =>
-        val xcheck = if (cs(0).x > cs(1).x)
-          cs(0).x >= c.x && c.x >= cs(1).x
-        else
-          cs(0).x <= c.x && c.x <= cs(1).x
+        val xcheck =
+          if (cs(0).x > cs(1).x)
+            cs(0).x >= c.x && c.x >= cs(1).x
+          else
+            cs(0).x <= c.x && c.x <= cs(1).x
 
-        val ycheck = if (cs(0).y > cs(1).y)
-          cs(0).y >= c.y && c.y >= cs(1).y
-        else
-          cs(0).y <= c.y && c.y <= cs(1).y
+        val ycheck =
+          if (cs(0).y > cs(1).y)
+            cs(0).y >= c.y && c.y >= cs(1).y
+          else
+            cs(0).y <= c.y && c.y <= cs(1).y
         xcheck && ycheck
       }
     }

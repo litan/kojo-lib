@@ -6,7 +6,7 @@ object Collidium {
   def main(args: Array[String]): Unit = {
     val kojo = KojoFrame.create()
     val builtins = kojo.builtins
-    
+
     import builtins._
     import CanvasAPI._
     import TurtleAPI._
@@ -42,7 +42,10 @@ object Collidium {
 
     val wallTexture = TexturePaint("/media/collidium/bwall.png", 0, 0)
     val obstacles = (1 to 3).map { n =>
-      trans(cb.x + n * obsDelta, cb.y + cb.height / 4) * fillColor(wallTexture) * penColor(noColor) -> Picture.rect(cb.height / 2, 12)
+      trans(cb.x + n * obsDelta, cb.y + cb.height / 4) * fillColor(wallTexture) * penColor(noColor) -> Picture.rect(
+        cb.height / 2,
+        12
+      )
     }
 
     draw(ball, target)
@@ -97,10 +100,11 @@ object Collidium {
     ball.onMouseRelease { (x, y) =>
       sling.erase()
       ball.forwardInputTo(stageArea)
-      var vel = if (slingPts.size == 1)
-        Vector2D(1, 1)
-      else
-        Vector2D(slingPts(0).x - slingPts(1).x, slingPts(0).y - slingPts(1).y).limit(7)
+      var vel =
+        if (slingPts.size == 1)
+          Vector2D(1, 1)
+        else
+          Vector2D(slingPts(0).x - slingPts(1).x, slingPts(0).y - slingPts(1).y).limit(7)
 
       animate {
         ball.translate(vel)

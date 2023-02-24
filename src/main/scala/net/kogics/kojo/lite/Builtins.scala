@@ -16,34 +16,43 @@
 package net.kogics.kojo
 package lite
 
+import java.awt.geom.GeneralPath
+import java.awt.image.BufferedImage
+import java.awt.image.BufferedImageOp
+import java.awt.Dimension
+import java.awt.Graphics2D
+import java.awt.Paint
+import java.awt.Toolkit
+import java.net.URL
+import javax.swing.JComponent
+
+import scala.language.implicitConversions
+
 import com.jhlabs.image.AbstractBufferedImageOp
 import com.jhlabs.image.LightFilter.Light
-import net.kogics.kojo.core.{VertexShape, Voice}
-import net.kogics.kojo.picture.{DslImpl, PicCache, PicDrawingDsl}
+import net.kogics.kojo.core.VertexShape
+import net.kogics.kojo.core.Voice
+import net.kogics.kojo.picture.DslImpl
+import net.kogics.kojo.picture.PicCache
+import net.kogics.kojo.picture.PicDrawingDsl
 import net.kogics.kojo.turtle.TurtleWorldAPI
 import net.kogics.kojo.util.Utils
 import net.kogics.kojo.xscala.RepeatCommands
 
-import java.awt.geom.GeneralPath
-import java.awt.image.{BufferedImage, BufferedImageOp}
-import java.awt.{Dimension, Graphics2D, Paint, Toolkit}
-import java.net.URL
-import javax.swing.JComponent
-import scala.language.implicitConversions
-
-// a static instance is needed for the compiler prefix code 
+// a static instance is needed for the compiler prefix code
 object Builtins {
   @volatile var instance: Builtins = _
 }
 
 class Builtins(
-                val CanvasAPI: DrawingCanvasAPI,
-                val TurtleAPI: TurtleWorldAPI,
-                val Staging: staging.API,
-                mp3player: music.KMp3,
-                fuguePlayer: music.FuguePlayer,
-                val kojoCtx: core.KojoCtx,
-              ) extends CoreBuiltins with RepeatCommands {
+    val CanvasAPI: DrawingCanvasAPI,
+    val TurtleAPI: TurtleWorldAPI,
+    val Staging: staging.API,
+    mp3player: music.KMp3,
+    fuguePlayer: music.FuguePlayer,
+    val kojoCtx: core.KojoCtx,
+) extends CoreBuiltins
+    with RepeatCommands {
   builtins =>
   Builtins.instance = this
 
@@ -294,16 +303,13 @@ class Builtins(
     mp3player.playMp3(mp3File)
   }
 
-
   def playMp3Sound(mp3File: String): Unit = {
     mp3player.playMp3Sound(mp3File)
   }
 
-
   def playMp3Loop(mp3File: String): Unit = {
     mp3player.playMp3Loop(mp3File)
   }
-
 
   def canvasBounds = turtleCanvas.cbounds
 
@@ -410,7 +416,8 @@ class Builtins(
     // def circle(x: Double, y: Double, r: Double) = picture.offset(x, y) -> picture.circle(r)
     def ellipse(xRadius: Double, yRadius: Double) = picture.ellipse(xRadius, yRadius)
 
-    def ellipseInRect(width: Double, height: Double) = picture.trans(width / 2, height / 2) -> picture.ellipse(width / 2, height / 2)
+    def ellipseInRect(width: Double, height: Double) =
+      picture.trans(width / 2, height / 2) -> picture.ellipse(width / 2, height / 2)
 
     // def ellipse(x: Double, y: Double, rx: Double, ry: Double) = picture.offset(x, y) -> picture.ellipse(rx, ry)
     def arc(radius: Double, angle: Double) = picture.arc(radius, angle)
@@ -557,7 +564,14 @@ class Builtins(
     mp3player.stopMp3Loop()
   }
 
-  def showGameTime(limitSecs: Int, endMsg: String, color: Color = black, fontSize: Int = 15, dx: Double = 10, dy: Double = 50): Unit = {
+  def showGameTime(
+      limitSecs: Int,
+      endMsg: String,
+      color: Color = black,
+      fontSize: Int = 15,
+      dx: Double = 10,
+      dy: Double = 50
+  ): Unit = {
     val cb = canvasBounds
     @volatile var gameTime = 0
     val timeLabel = trans(cb.x + dx, cb.y + dy) -> PicShape.textu(gameTime, fontSize, color)
@@ -586,7 +600,7 @@ class Builtins(
 
     def circle(r: Double): Shape = DslImpl(picture.circle(r)).translated(r, r)
 
-    def gap(w: Double, h: Double) = rectangle(w, h) outlined (noColor)
+    def gap(w: Double, h: Double) = rectangle(w, h).outlined(noColor)
 
     def vline(l: Double): Shape = DslImpl(picture.vline(l))
 
@@ -717,10 +731,13 @@ class Builtins(
 
   import scala.language.reflectiveCalls
 
-  def canvasSketch(sketch: {
-    def setup(cd: CanvasDraw): Unit
-    def drawLoop(cd: CanvasDraw): Unit
-  }, scaleFactor: Double = 1): Unit = {
+  def canvasSketch(
+      sketch: {
+        def setup(cd: CanvasDraw): Unit
+        def drawLoop(cd: CanvasDraw): Unit
+      },
+      scaleFactor: Double = 1
+  ): Unit = {
 
     @volatile var inited = false
     @volatile var initStarted = false // to support breakpoints in setup

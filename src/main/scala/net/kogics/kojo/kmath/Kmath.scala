@@ -3,10 +3,9 @@ package kmath
 
 import scala.language.implicitConversions
 
+import net.kogics.kojo.core.Point
 import org.apache.commons.math3.stat.StatUtils
 import org.apache.commons.math3.util.ArithmeticUtils
-
-import net.kogics.kojo.core.Point
 
 object Kmath {
   implicit def seqToArrD(seq: Seq[Double]): Array[Double] = seq.toArray
@@ -17,7 +16,8 @@ object Kmath {
   def variance(nums: Array[Double], mean: Double) = StatUtils.variance(nums, mean)
 
   def constrain(value: Double, min: Double, max: Double) = util.Math.constrain(value, min, max)
-  def map(value: Double, start1: Double, stop1: Double, start2: Double, stop2: Double) = util.Math.map(value, start1, stop1, start2, stop2)
+  def map(value: Double, start1: Double, stop1: Double, start2: Double, stop2: Double) =
+    util.Math.map(value, start1, stop1, start2, stop2)
   def lerp(start: Double, stop: Double, amt: Double) = util.Math.lerp(start, stop, amt)
 
   def distance(x1: Double, y1: Double, x2: Double, y2: Double): Double =

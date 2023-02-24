@@ -6,7 +6,7 @@ object MandelbrotSet {
   def main(args: Array[String]): Unit = {
     val kojo = KojoFrame.create(true)
     val builtins = kojo.builtins
-    
+
     import builtins._
     import CanvasAPI._
     import TurtleAPI._
@@ -25,8 +25,7 @@ object MandelbrotSet {
           Complex(re + other.re, im + other.im)
 
         def *(other: Complex) =
-          Complex(re * other.re - im * other.im,
-            re * other.im + other.re * im)
+          Complex(re * other.re - im * other.im, re * other.im + other.re * im)
 
         def abs = math.sqrt(re * re + im * im)
       }
@@ -62,7 +61,10 @@ object MandelbrotSet {
         oymin = ymin;
         oymax = ymax
         val img = image(size, size)
-        for {xi <- 0 until size; yi <- 0 until size} {
+        for {
+          xi <- 0 until size
+          yi <- 0 until size
+        } {
           val x = xmin + xi * (xmax - xmin) / size
           val y = ymin + yi * (ymax - ymin) / size
           var z = Complex(0, 0);
@@ -109,7 +111,9 @@ object MandelbrotSet {
           val dely = (oymax - oymin) / size
           dragSq.erase()
           pic.erase()
-          pic = trans(cDelta.x, cDelta.y) -> Picture.image(mandel(oxmin + delx * bxmin, oxmin + delx * bxmax, oymin + dely * bymin, oymin + dely * bymax))
+          pic = trans(cDelta.x, cDelta.y) -> Picture.image(
+            mandel(oxmin + delx * bxmin, oxmin + delx * bxmax, oymin + dely * bymin, oymin + dely * bymax)
+          )
           pic.draw()
           installMouseHandlers(pic)
         }
