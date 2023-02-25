@@ -1,6 +1,5 @@
 package driver
 
-import net.kogics.kojo.lite.KojoFrame
 import net.kogics.kojo.lite.KojoHeadless
 
 object MainHeadless {
