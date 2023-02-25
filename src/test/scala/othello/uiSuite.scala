@@ -18,8 +18,8 @@ class OthelloUITestSuite extends FunSuite with Matchers {
     val kojo = KojoFrame.create()
     val builtins = kojo.builtins
     import builtins._
-    import TSCanvas._
-    import Tw._ // for cleari
+    import DCanvas._
+    import TurtleWorld._ // for cleari
 
     test("basic board drawing") {
       val board = new EBoard(8, Black, 0)

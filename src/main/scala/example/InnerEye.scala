@@ -8,8 +8,8 @@ object InnerEye {
     val builtins = kojo.builtins
 
     import builtins._
-    import TSCanvas._
-    import Tw._
+    import DCanvas._
+    import TurtleWorld._
 
     // `Inner Eye` sample from Kojo Showcase menu
 

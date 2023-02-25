@@ -8,8 +8,8 @@ object Collidium {
     val builtins = kojo.builtins
 
     import builtins._
-    import TSCanvas._
-    import Tw._
+    import DCanvas._
+    import TurtleWorld._
 
     // `Collidium` sample from Kojo Showcase menu
 

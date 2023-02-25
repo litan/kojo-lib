@@ -7,7 +7,7 @@ class UI(kojo: KojoFrame, board: EBoard, history: History, computerPlays: Stone)
 
   val builtins = kojo.builtins
   import builtins._
-  import TSCanvas._
+  import DCanvas._
 
   val length = 90 // size of squares on the board
   val (llx, lly) = (-board.size / 2 * length, -board.size / 2 * length)

@@ -8,8 +8,8 @@ object ParticleLife {
     val builtins = kojo.builtins
 
     import builtins._
-    import TSCanvas._
-    import Tw._
+    import DCanvas._
+    import TurtleWorld._
 
     object code {
       // written in OO style

@@ -8,7 +8,7 @@ object Othello {
   val builtins = kojo.builtins
 
   import builtins._
-  import TSCanvas._
+  import DCanvas._
 
   // todo: how to import xml?
   // val welcome = <html> Welcome to Kojothello! </html>.toString

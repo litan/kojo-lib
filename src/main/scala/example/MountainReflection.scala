@@ -8,8 +8,8 @@ object MountainReflection {
     val builtins = kojo.builtins
 
     import builtins._
-    import TSCanvas._
-    import Tw._
+    import DCanvas._
+    import TurtleWorld._
 
     object code {
       // Mountain reflection usingregular picture transforms and a rondom seed

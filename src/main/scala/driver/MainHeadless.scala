@@ -1,6 +1,7 @@
 package driver
 
-import net.kogics.kojo.lite.{KojoFrame, KojoHeadless}
+import net.kogics.kojo.lite.KojoFrame
+import net.kogics.kojo.lite.KojoHeadless
 
 object MainHeadless {
   def main(args: Array[String]): Unit = {
@@ -8,8 +9,8 @@ object MainHeadless {
     val builtins = kojo.builtins
 
     import builtins._
-    import TSCanvas._
-    import Tw._
+    import DCanvas._
+    import TurtleWorld._
 
     def spiral(size: Int, angle: Int): Unit = {
       if (size <= 300) {

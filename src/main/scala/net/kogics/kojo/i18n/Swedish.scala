@@ -13,8 +13,8 @@ import net.kogics.kojo.xscala.RepeatCommands
   */
 object Swedish {
   val builtins = English.frame.builtins
-  val CanvasAPI = builtins.TSCanvas
-  val TurtleAPI = builtins.Tw
+  val CanvasAPI = builtins.DCanvas
+  val TurtleAPI = builtins.TurtleWorld
 
   trait SwedishTurtle {
     // I know it's controversial not to use empty parens on def sudda: Unit

@@ -9,8 +9,8 @@ object Main {
     val builtins = kojo.builtins
 
     import builtins._
-    import TSCanvas._
-    import Tw._
+    import DCanvas._
+    import TurtleWorld._
 
     def spiral(size: Int, angle: Int): Unit = {
       if (size <= 300) {

@@ -16,7 +16,9 @@
 package net.kogics.kojo
 package lite
 
-import java.awt.geom.{Ellipse2D, GeneralPath, Rectangle2D}
+import java.awt.geom.Ellipse2D
+import java.awt.geom.GeneralPath
+import java.awt.geom.Rectangle2D
 import java.awt.image.BufferedImage
 import java.awt.image.BufferedImageOp
 import java.awt.Dimension
@@ -25,7 +27,9 @@ import java.awt.Paint
 import java.awt.Toolkit
 import java.net.URL
 import javax.swing.JComponent
+
 import scala.language.implicitConversions
+
 import com.jhlabs.image.AbstractBufferedImageOp
 import com.jhlabs.image.LightFilter.Light
 import net.kogics.kojo.core.Rich2DPath
@@ -43,8 +47,8 @@ object Builtins {
 }
 
 class Builtins(
-    val TSCanvas: DrawingCanvasAPI,
-    val Tw: TurtleWorldAPI,
+    val DCanvas: DrawingCanvasAPI,
+    val TurtleWorld: TurtleWorldAPI,
     val Staging: staging.API,
     mp3player: music.KMp3,
     fuguePlayer: music.FuguePlayer,
@@ -52,11 +56,11 @@ class Builtins(
 ) extends CoreBuiltins
     with RepeatCommands { builtins =>
   Builtins.instance = this
-  val tCanvas = TSCanvas.tCanvas
+  val tCanvas = DCanvas.tCanvas
 
-  val Costume = new Tw.Costume
-  val Background = new Tw.Background
-  val Sound = new Tw.Sound
+  val Costume = new TurtleWorld.Costume
+  val Background = new TurtleWorld.Background
+  val Sound = new TurtleWorld.Sound
 
   def retainSingleLineCode() = {}
   def clearSingleLineCode() = {}
@@ -355,7 +359,7 @@ class Builtins(
 
   //  def bounceVecOffStage(v: Vector2D, p: Picture): Vector2D =
   //    picture.bounceVecOffStage(v, p)
-  def bouncePicVectorOffStage(p: Picture, v: Vector2D): Vector2D = bouncePicVectorOffPic(p, v, TSCanvas.stageBorder)
+  def bouncePicVectorOffStage(p: Picture, v: Vector2D): Vector2D = bouncePicVectorOffPic(p, v, DCanvas.stageBorder)
   def bouncePicVectorOffPic(pic: Picture, v: Vector2D, obstacle: Picture): Vector2D =
     picture.bouncePicVectorOffPic(pic, v, obstacle, Random)
 
@@ -609,9 +613,9 @@ class Builtins(
     val fpsLabel = Picture.textu("Fps: ", fontSize, color)
     fpsLabel.setPosition(cb.x + 10, cb.y + cb.height - 10)
     draw(fpsLabel)
-    fpsLabel.forwardInputTo(TSCanvas.stageArea)
+    fpsLabel.forwardInputTo(DCanvas.stageArea)
 
-    TSCanvas.timer(1000) {
+    DCanvas.timer(1000) {
       fpsLabel.update(s"Fps: $frameCnt")
       frameCnt = 0
     }
@@ -677,10 +681,10 @@ class Builtins(
     gameTimeLabel = Some(trans(cb.x + dx, cb.y + dy) -> PicShape.textu(gameTime, fontSize, color))
     gameTimeLabel.foreach { label =>
       draw(label)
-      label.forwardInputTo(TSCanvas.stageArea)
+      label.forwardInputTo(DCanvas.stageArea)
     }
 
-    TSCanvas.timer(1000) {
+    DCanvas.timer(1000) {
       gameTime += incr
       gameTimeLabel.foreach(_.update(gameTime))
       if (gameTime == endTime) {
@@ -721,7 +725,7 @@ class Builtins(
     fn
   }
 
-  def drawLoop(fn: => Unit) = TSCanvas.animate {
+  def drawLoop(fn: => Unit) = DCanvas.animate {
     fn
   }
 
@@ -734,7 +738,7 @@ class Builtins(
 
   def originTopLeft(): Unit = {
     val (w, h) = wh
-    def work = TSCanvas.zoomXY(1, -1, w / 2, h / 2)
+    def work = DCanvas.zoomXY(1, -1, w / 2, h / 2)
     work
     Utils.schedule(0.5) {
       work
@@ -743,7 +747,7 @@ class Builtins(
 
   def originBottomLeft(): Unit = {
     val (w, h) = wh
-    def work = TSCanvas.zoomXY(1, 1, w / 2, h / 2)
+    def work = DCanvas.zoomXY(1, 1, w / 2, h / 2)
     work
     Utils.schedule(0.5) {
       work

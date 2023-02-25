@@ -8,8 +8,8 @@ object DemoPlatformer {
     val builtins = kojo.builtins
 
     import builtins._
-    import TSCanvas._
-    import Tw._
+    import DCanvas._
+    import TurtleWorld._
 
     // `Demo Platformer` sample from Kojo Showcase menu
 

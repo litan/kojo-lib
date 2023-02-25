@@ -29,8 +29,7 @@ class AboutMenu(kojoCtx: core.KojoCtx) {
       val aboutText = new JEditorPane
       aboutText.setEditorKit(new HTMLEditorKit)
       aboutText.setEditable(false)
-      aboutText.setText(
-        s"""<html><body>
+      aboutText.setText(s"""<html><body>
 <div style="font-size: ${12 + kojoCtx.screenDpiFontDelta}pt; font-family: Verdana, 'Verdana CE',  Arial, 'Arial CE', 'Lucida Grande CE', lucida, 'Helvetica CE', sans-serif; ">
           <strong>Kojo</strong> ${Versions.KojoLibMajorVersion}<br/>
           Version: ${Versions.KojoLibVersion}  <em>${Versions.KojoLibRevision}</em><br/>

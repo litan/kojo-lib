@@ -8,8 +8,8 @@ object MandelbrotSet {
     val builtins = kojo.builtins
 
     import builtins._
-    import TSCanvas._
-    import Tw._
+    import DCanvas._
+    import TurtleWorld._
 
     // Mandelbrot Set (zoomable)` sample from Kojo Showcase menu
 

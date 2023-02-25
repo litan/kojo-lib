@@ -7,6 +7,6 @@ import net.kogics.kojo.lite.KojoFrame
 object English {
   val frame = KojoFrame.create(width = 800, height = 600, showLoading = false)
   val builtins = frame.builtins
-  val CanvasAPI = builtins.TSCanvas
-  val TurtleAPI = builtins.Tw
+  val CanvasAPI = builtins.DCanvas
+  val TurtleAPI = builtins.TurtleWorld
 }

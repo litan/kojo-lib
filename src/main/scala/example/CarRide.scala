@@ -8,8 +8,8 @@ object CarRide {
     val builtins = kojo.builtins
 
     import builtins._
-    import TSCanvas._
-    import Tw._
+    import DCanvas._
+    import TurtleWorld._
 
     // `Car Ride` sample from Kojo Showcase menu
 

@@ -8,8 +8,8 @@ object TicTacToeUnbeatable {
     val builtins = kojo.builtins
 
     import builtins._
-    import TSCanvas._
-    import Tw._
+    import DCanvas._
+    import TurtleWorld._
 
     // `Tic Tac Toe` sample from the iKojo examples
     // Play online here:
