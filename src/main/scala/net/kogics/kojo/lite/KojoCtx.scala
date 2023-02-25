@@ -18,7 +18,9 @@ package lite
 
 import java.awt.Color
 import java.awt.Cursor
+import java.awt.Dimension
 import java.awt.Font
+import java.awt.GraphicsEnvironment
 import java.awt.Toolkit
 import java.util.prefs.Preferences
 import javax.swing.plaf.FontUIResource
@@ -37,10 +39,12 @@ import net.kogics.kojo.util.Utils
 
 class KojoCtx extends core.KojoCtx {
   val prefs = Preferences.userRoot().node("Kojolite-Prefs")
+  val headless = GraphicsEnvironment.isHeadless
+
   var frame: JFrame = _
   var canvas: SpriteCanvas = _
   @volatile var fps = 50 // gets reset on clear
-  @volatile var screenDPI = Toolkit.getDefaultToolkit.getScreenResolution
+  @volatile var screenDPI = if (!headless) Toolkit.getDefaultToolkit.getScreenResolution else 0
   var statusBar: StatusBar = _
   Utils.kojoCtx = this
 
@@ -49,7 +53,7 @@ class KojoCtx extends core.KojoCtx {
     activityListener.setRealListener(l)
   }
 
-  lazy val screenSize = Toolkit.getDefaultToolkit.getScreenSize
+  lazy val screenSize = if (!headless) Toolkit.getDefaultToolkit.getScreenSize else new Dimension(0, 0)
   lazy val baseFontSize = System.getProperty("kojo.baseFont.size").toInt
   lazy val hiDpiFontIncrease = System.getProperty("kojo.hidpi.font.increase").toInt
 
