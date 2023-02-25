@@ -10,4 +10,3 @@ or directly from https://scala-cli.virtuslab.org/install  */
 // The lines below make Swedish and English commands available on top level:
 
 export net.kogics.kojo.Swedish.*, padda.*, CanvasAPI.*, TurtleAPI.*
-export builtins.{TurtleAPI as _, CanvasAPI as _, *}

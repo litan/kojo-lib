@@ -10,4 +10,3 @@ or directly from https://scala-cli.virtuslab.org/install  */
 // The lines below make English commands available on top level:
 
 export net.kogics.kojo.English.*, CanvasAPI.*, TurtleAPI.* 
-export builtins.{TurtleAPI as _, CanvasAPI as _, *}
