@@ -21,7 +21,7 @@ libraryDependencies ++= Seq(
     "org.scala-lang" % "scala-library" % scalaVersion.value,
     "org.scala-lang" % "scala-reflect" % scalaVersion.value % "test",
     "org.scala-lang.modules" % "scala-xml_2.13" % "1.3.0" % "test",
-    "com.typesafe.akka" % "akka-actor_2.13" % "2.5.29",
+    "com.typesafe.akka" % "akka-actor_2.13" % "2.6.16",
     "org.piccolo2d" % "piccolo2d-core" % "1.3.1",
     "org.piccolo2d" % "piccolo2d-extras" % "1.3.1",
     "com.vividsolutions" % "jts" % "1.13" intransitive(),
