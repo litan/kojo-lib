@@ -8,7 +8,7 @@ Kojo-Lib provides [Kojo](https://www.kojo.in) (the Scala based learning environm
 
 * Check that you have `scala-cli` in terminal. If you install latest `scala` from https://www.scala-lang.org/download/ via `cs setup` you will also get `scala-cli`. You can also install `scala-cli` separately from https://scala-cli.virtuslab.org/
 
-* Download this file: https://github.com/litan/kojo-lib/releases/download/v0.1.1/kojo-english.scala
+* Download this file: https://github.com/litan/kojo-lib/releases/download/v0.2.0/kojo-english.scala
 
 * Start the Scala REPL in the same dir as the above file with this command:
 ```
@@ -23,7 +23,7 @@ Type in expressions for evaluation. Or try :help.
 scala> forward()
 ``` 
 
-* You should now see the Kojo turtle draw a red line i a new window.
+* You should now see the Kojo turtle draw a red line in a new window.
 
 * For further information see [here](https://github.com/litan/kojo-lib/tree/main/getting-started), including how to get Kojo started with a specific local language.
 
@@ -34,7 +34,7 @@ scala> forward()
 
 * Add the following dependency in your `build.sbt` file:
 ```
-val kojoLibVersion = "0.1.1"
+val kojoLibVersion = "0.2.0"
 libraryDependencies += "net.kogics" % "kojo-lib" % kojoLibVersion from 
   s"https://github.com/litan/kojo-lib/releases/download/v$kojoLibVersion/kojo-lib-assembly-$kojoLibVersion.jar"
 ```
