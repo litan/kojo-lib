@@ -3,8 +3,8 @@
 * Install `scala-cli` from here: https://scala-cli.virtuslab.org/install
 
 * Download one of these files, depending on which language you want:
-  - English: https://github.com/litan/kojo-lib/releases/download/v0.1.1/kojo-english.scala
-  - Swedish: https://github.com/litan/kojo-lib/releases/download/v0.1.1/kojo-swedish.scala
+  - English: https://github.com/litan/kojo-lib/releases/download/v0.2.0/kojo-english.scala
+  - Swedish: https://github.com/litan/kojo-lib/releases/download/v0.2.0/kojo-swedish.scala
 
 * Start the Scala 3 REPL with this command in the terminal in the same dir as the above file:
   ```
