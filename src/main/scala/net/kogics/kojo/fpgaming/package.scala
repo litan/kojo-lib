@@ -20,7 +20,7 @@ import net.kogics.kojo.core.Point
 import net.kogics.kojo.core.SCanvas
 import net.kogics.kojo.util.Utils
 
-package object gaming {
+package object fpgaming {
   trait GameMsgSink[Msg] {
     def triggerIncrementalUpdate(msg: Msg): Unit
 
@@ -99,7 +99,8 @@ package object gaming {
       init: => Model,
       update: (Model, Msg) => Model,
       view: Model => Picture,
-      subscriptions: Model => Seq[Sub[Msg]]
+      subscriptions: Model => Seq[Sub[Msg]],
+      refreshRate: Long
   )(implicit canvas: SCanvas)
       extends GameMsgSink[Msg] {
     private var currModel: Model = _
@@ -107,7 +108,7 @@ package object gaming {
     private var currView: Picture = _
     private var firstTime = true
 
-    private var gameTimer = canvas.timer(20) {
+    private var gameTimer = canvas.timer(refreshRate) {
       if (firstTime) {
         firstTime = false
         currModel = init

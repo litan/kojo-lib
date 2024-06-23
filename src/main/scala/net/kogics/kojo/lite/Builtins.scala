@@ -27,14 +27,10 @@ import java.awt.Paint
 import java.awt.Toolkit
 import java.net.URL
 import javax.swing.JComponent
-
 import scala.language.implicitConversions
-
 import com.jhlabs.image.AbstractBufferedImageOp
 import com.jhlabs.image.LightFilter.Light
-import net.kogics.kojo.core.Rich2DPath
-import net.kogics.kojo.core.VertexShape
-import net.kogics.kojo.core.Voice
+import net.kogics.kojo.core.{Rich2DPath, SCanvas, VertexShape, Voice}
 import net.kogics.kojo.kmath.KEasing
 import net.kogics.kojo.music.RealtimeNotePlayer
 import net.kogics.kojo.turtle.TurtleWorldAPI
@@ -212,7 +208,7 @@ class Builtins(
   def withFillColor(pic: Picture, color: Color) = pic.withFillColor(color)
   def withPenColor(pic: Picture, color: Color) = pic.withPenColor(color)
 
-  implicit val _picCanvas = tCanvas
+  implicit val _picCanvas: SCanvas = tCanvas
   def pict(painter: Painter) = picture.Pic(painter)
   def PictureT(painter: Painter) = picture.Pic(painter)
   def Picture(fn: => Unit) = picture.Pic0 { t =>
@@ -760,7 +756,7 @@ class Builtins(
   def rangeTo(start: Double, end: Double, step: Double) = Range.BigDecimal.inclusive(start, end, step)
   def rangeTill(start: Double, end: Double, step: Double) = Range.BigDecimal(start, end, step)
 
-  implicit def bd2double(bd: BigDecimal) = bd.doubleValue
+  implicit def bd2double(bd: BigDecimal): Double = bd.doubleValue
 
   type CanvasDraw = net.kogics.kojo.lite.CanvasDraw
   import scala.language.reflectiveCalls
@@ -836,6 +832,8 @@ class Builtins(
     LoadProgress.hideLoading()
   }
 
+  def resolvedPath(fname: String): String = net.kogics.kojo.util.Utils.absolutePath(fname)
+
   def animateWithRedraw[S](initState: S, nextState: S => S, stateView: S => Picture): Unit = {
     import edu.umd.cs.piccolo.activities.PActivity
 
@@ -846,8 +844,8 @@ class Builtins(
       case (state, pic) =>
         val newState = nextState(state)
         val pic2 = stateView(state)
-        pic.erase()
         pic2.draw()
+        pic.erase()
         if (newState == state) {
           tCanvas.stopAnimationActivity(anim)
         }
@@ -876,15 +874,21 @@ class Builtins(
     animateWithSetupCanvasDraw { canvas => }(drawFrame)
   }
 
-  type Sub[M] = gaming.Sub[M]
-  type CmdQ[M] = gaming.CmdQ[M]
-  val Subscriptions = gaming.Subscriptions
-  lazy val CollisionDetector = new gaming.CollisionDetector()
-  @volatile private var currGame: Option[gaming.Game[_, _]] = None
+  type Sub[M] = fpgaming.Sub[M]
+  type CmdQ[M] = fpgaming.CmdQ[M]
+  val Subscriptions = fpgaming.Subscriptions
+  lazy val CollisionDetector = new fpgaming.CollisionDetector()
+  @volatile private var currGame: Option[fpgaming.Game[_, _]] = None
 
-  def runGame[S, M](init: S, update: (S, M) => S, view: S => Picture, subscriptions: S => Seq[Sub[M]]): Unit = {
-    currGame = Some(new gaming.Game(init, update, view, subscriptions))
+  def runGame[S, M](
+      init: S,
+      update: (S, M) => S,
+      view: S => Picture,
+      subscriptions: S => Seq[Sub[M]],
+      refreshRate: Long = 20
+  ): Unit = {
+    currGame = Some(new fpgaming.Game(init, update, view, subscriptions, refreshRate))
   }
 
-  def runCommandQuery[M](cmdQ: CmdQ[M]): Unit = currGame.get.asInstanceOf[gaming.Game[_, M]].runCommandQuery(cmdQ)
+  def runCommandQuery[M](cmdQ: CmdQ[M]): Unit = currGame.get.asInstanceOf[fpgaming.Game[_, M]].runCommandQuery(cmdQ)
 }
