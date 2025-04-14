@@ -11,6 +11,8 @@ object DynamicSquare {
     import DCanvas._
     import TurtleWorld._
 
+    import net.kogics.kojo.music
+
     object code {
       cleari()
       setBackgroundH(ColorMaker.hsl(210, 1.00, 0.1), ColorMaker.hsl(210, 1.00, 0.15))

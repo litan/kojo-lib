@@ -433,6 +433,19 @@ class Builtins(
     // def ellipse(x: Double, y: Double, rx: Double, ry: Double) = picture.offset(x, y) -> picture.ellipse(rx, ry)
     def arc(radius: Double, angle: Double) = picture.arc(radius, angle)
     def point = picture.trans(0, -0.01 / 2) -> line(0, 0.01)
+    private def picFromVertexArray(envelope: collection.Seq[Double]): Picture = {
+      val e2 = envelope.grouped(2)
+      val start = e2.next()
+      val boundary = Picture.fromPath { p =>
+        p.moveTo(start(0), start(1))
+        while (e2.hasNext) {
+          val pt = e2.next()
+          p.lineTo(pt(0), pt(1))
+        }
+      }
+      drawAndHide(boundary)
+      boundary
+    }
     def image(fileName: String): Picture = {
       if (fileName.startsWith("http")) {
         image(url(fileName))
@@ -449,10 +462,20 @@ class Builtins(
         picture.image(fileName, Some(envelope))
       }
     }
+    def image(fileName: String, envelope: collection.Seq[Double]): Picture = {
+      if (fileName.startsWith("http")) {
+        image(url(fileName), envelope)
+      }
+      else {
+        picture.image(fileName, Some(picFromVertexArray(envelope)))
+      }
+    }
     def image(url: URL) = picture.image(url, None)
     def image(url: URL, envelope: Picture) = picture.image(url, Some(envelope))
+    def image(url: URL, envelope: collection.Seq[Double]) = picture.image(url, Some(picFromVertexArray(envelope)))
     def image(image: Image) = picture.image(image, None)
     def image(image: Image, envelope: Picture) = picture.image(image, Some(envelope))
+    def image(image: Image, envelope: collection.Seq[Double]) = picture.image(image, Some(picFromVertexArray(envelope)))
     def widget(component: JComponent) = picture.widget(component)
     def button(label: String)(fn: => Unit) = widget(Button(label)(fn))
     def effectablePic(pic: Picture) = picture.effectablePic(pic)

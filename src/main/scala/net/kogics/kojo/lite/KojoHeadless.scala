@@ -32,7 +32,7 @@ object KojoHeadless {
     kf
   }
 
-  def create(width: Int, height: Int, showLoading: Boolean): KojoHeadless = {
+  def create(width: Int, height: Int): KojoHeadless = {
     incrementInstanceCount()
     val kf = new KojoHeadless(width, height)
     kf.show()
@@ -40,7 +40,7 @@ object KojoHeadless {
   }
 }
 
-class KojoHeadless private (width: Int, height: Int) {
+class KojoHeadless private (width: Int, height: Int) extends KojoHandle {
   System.setProperty("java.awt.headless", "true")
 
   if (Utils.isLinux) {

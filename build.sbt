@@ -2,9 +2,9 @@ name := "kojo-lib"
 
 organization := "net.kogics"
 
-version := "0.3.0"
+version := "0.3.1"
 
-scalaVersion := "2.13.14"
+scalaVersion := "2.13.16"
 
 scalacOptions := Seq("-feature", "-deprecation")
 run / javaOptions ++= Seq("-Xmx1024m", "-Xss1m")

@@ -54,7 +54,7 @@ object KojoFrame {
   }
 }
 
-class KojoFrame private (width: Int, height: Int, showLoading: Boolean) {
+class KojoFrame private (width: Int, height: Int, showLoading: Boolean) extends KojoHandle {
   if (Utils.isLinux) {
     System.setProperty("sun.java2d.xrender", "false")
   }
