@@ -1,5 +1,5 @@
 //> using scala 3
-//> using dep "net.kogics:kojo-lib:0.3.1,url=https://github.com/litan/kojo-lib/releases/download/v0.3.1/kojo-lib-assembly-0.3.1.jar"
+//> using dep "net.kogics:kojo-lib:0.3.2,url=https://github.com/litan/kojo-lib/releases/download/v0.3.2/kojo-lib-assembly-0.3.2.jar"
 
 /* The above directives enable scala repl to use Kojo in Scala 3 with this command:
 scala repl .
