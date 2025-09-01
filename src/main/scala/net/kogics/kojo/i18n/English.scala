@@ -1,4 +1,4 @@
-package net.kogics.kojo
+package net.kogics.kojo.i18n
 
 import net.kogics.kojo.lite.KojoFrame
 

@@ -9,6 +9,6 @@ https://www.scala-lang.org/download/
 
 // The lines below make English commands available on top level:
 
-export net.kogics.kojo.English.*, CanvasAPI.*, TurtleAPI.*
+export net.kogics.kojo.i18n.English.*, CanvasAPI.*, TurtleAPI.*
 export builtins.activateCanvas
 export java.awt.Color

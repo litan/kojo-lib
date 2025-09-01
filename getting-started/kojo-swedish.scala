@@ -9,6 +9,6 @@ https://www.scala-lang.org/download/
 
 // The lines below make Swedish and English commands available on top level:
 
-export net.kogics.kojo.Swedish.*, padda.*, CanvasAPI.*, TurtleAPI.*
+export net.kogics.kojo.i18n.Swedish.*, padda.*, CanvasAPI.*, TurtleAPI.*
 export builtins.activateCanvas
 export java.awt.Color
