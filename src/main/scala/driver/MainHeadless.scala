@@ -3,8 +3,9 @@ package driver
 import net.kogics.kojo.lite.KojoHeadless
 
 object MainHeadless {
+  // An example of how to use Kojo in a headless fashion
   def main(args: Array[String]): Unit = {
-    val kojo = KojoHeadless.create()
+    val kojo = KojoHeadless.create(600, 600)
     val builtins = kojo.builtins
 
     import builtins._
@@ -27,8 +28,8 @@ object MainHeadless {
     setPenThickness(1)
     setSpeed(fast)
     spiral(0, 91)
-    println("Exporting screenshot...")
-    exportImage("kojo-screenshot")
+    println("Exporting Kojo Output...")
+    exportImageToFile("canvas.png")
     println("Done")
   }
 }
