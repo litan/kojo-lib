@@ -731,7 +731,7 @@ class Builtins(
     cwidth = cb.width.toInt
     cheight = cb.height.toInt
     clearGameTime()
-    currGame = null
+    currGame = None
   }
 
   def size(width: Int, height: Int): Unit = {
