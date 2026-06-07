@@ -46,6 +46,7 @@ trait TSCanvasFeatures {
   def viewScale(factor: Double): Unit = zoom(factor)
   def viewTranslate(x: Double, y: Double): Unit = scroll(-x, -y)
   def viewRotate(a: Double): Unit
+  def exportImageToFile(fileName: String): Unit
   def exportImage(filePrefix: String): java.io.File
   def exportImage(filePrefix: String, width: Int, height: Int): java.io.File
   def exportImageH(filePrefix: String, height: Int): java.io.File

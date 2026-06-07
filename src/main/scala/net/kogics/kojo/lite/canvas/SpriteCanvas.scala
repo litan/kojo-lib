@@ -573,6 +573,10 @@ class SpriteCanvas(val kojoCtx: core.KojoCtx) extends PSwingCanvas with SCanvas 
     javax.imageio.ImageIO.write(image.asInstanceOf[java.awt.image.BufferedImage], "png", outfile)
   }
 
+  def exportImageToFile(fileName: String): Unit = {
+    exportImageToFile(new File(fileName), getWidth, getHeight)
+  }
+
   def exportImage(filePrefix: String): File = {
     exportImageHelper(filePrefix, getWidth, getHeight)
   }
